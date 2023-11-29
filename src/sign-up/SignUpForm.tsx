@@ -139,8 +139,8 @@ const SignForm = () => {
     return (
         <Grid
             sx={{
-                minWidth: '390px',
-                maxWidth: '500px'
+                minWidth: '24rem',
+                maxWidth: '31rem'
             }}
             width="30%"
             padding='2rem'
@@ -167,7 +167,7 @@ const SignForm = () => {
                         md={6}
                         sx={{
                             minWidth: '18rem',
-                            maxWidth: '500px'
+                            maxWidth: '31rem'
                         }}
                         >
                         <TextField
@@ -194,7 +194,7 @@ const SignForm = () => {
                         md={6}
                         sx={{
                             minWidth: '18rem',
-                            maxWidth: '500px'
+                            maxWidth: '31rem'
                         }}
                         >
                         <TextField
@@ -221,7 +221,7 @@ const SignForm = () => {
                         md={6}
                         sx={{
                             minWidth: '18rem',
-                            maxWidth: '500px'
+                            maxWidth: '31rem'
                         }}
                         >
                         <TextField
@@ -248,7 +248,7 @@ const SignForm = () => {
                         md={6}
                         sx={{
                             minWidth: '18rem',
-                            maxWidth: '500px'
+                            maxWidth: '31rem'
                         }}
                         >
                         <FormControl
