@@ -1,10 +1,12 @@
 import './App.css';
-import SignForm from './signIn/SignForm';
+import SignInForm from './components/sign-in/SignInForm';
+import SignUpForm from './components/sign-up/SignUpForm';
 
 function App() {
   return (
     <>
-      <SignForm />
+      <SignInForm onSignIn={() => {}}/>
+      <SignUpForm />
     </>
   );
 }

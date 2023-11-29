@@ -12,7 +12,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useState } from 'react';
 
-const SignForm = () => {
+const SignUpForm = () => {
 
     const [isPressed, setIsPressed] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
@@ -103,7 +103,7 @@ const SignForm = () => {
                 </Grid>
                 <Button
                     variant="contained"
-                    style={{ borderRadius: 20 ,
+                    style={{
                         width: '70%',
                         fontSize: '.7rem'
                     }}
@@ -128,4 +128,4 @@ const SignForm = () => {
     );
 };
 
-export default SignForm;
+export default SignUpForm;
