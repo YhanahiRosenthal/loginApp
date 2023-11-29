@@ -1,4 +1,4 @@
-import { Grid, TextField, Typography } from '@mui/material';
+import { FormHelperText, Grid, TextField, Typography } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -10,22 +10,47 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Joi from 'joi';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { useForm } from 'react-hook-form';
 
 interface FormData {
     displayName: string;
     username: string;
     email: string;
     password: string;
+    termsAndConditions: Boolean;
   }
 
 const SignForm = () => {
 
     const [isPressed, setIsPressed] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
+    const [isFormValid, setIsFormValid] = useState(false);
 
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleShowPassword = () => setShowPassword((show) => !show);
+
+    const [formData, setFormData] = useState<FormData>({
+        displayName: '',
+        username: '',
+        email: '',
+        password: '',
+        termsAndConditions: isPressed,
+      });
+
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { checked } = e.target;
+        console.log(e.target.checked)
+        setIsPressed(checked);
+        setFormData({ ...formData, termsAndConditions: checked });
+    };
+
+    useEffect(() => {
+
+        const isAllFieldsFilled = Object.values(formData).every(value => !!value);
+        setIsFormValid(isAllFieldsFilled && isPressed);
+    }, [formData, isPressed]);
 
     const schema = Joi.object({
         displayName:
@@ -69,7 +94,7 @@ const SignForm = () => {
         password:
             Joi.string()
                 .min(8)
-                .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
+                // .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
                 .required()
                 .messages({
                 'string.pattern.base':
@@ -77,20 +102,29 @@ const SignForm = () => {
                 'string.min': 'The password must be at least 8 characters long',
                 'string.empty': 'The password field is required'
                 }),
+        termsAndConditions:
+            Joi.boolean()
+                .valid(true)
+                .required()
+                .messages({
+                    'boolean.base': 'You must agree to the terms and conditions',
+                    'any.only': 'You must agree to the terms and conditions',
+                    'any.required': 'You must agree to the terms and conditions',
+                }),
     })
-
-    const [formData, setFormData] = useState<FormData>({
-        displayName: '',
-        username: '',
-        email: '',
-        password: '',
-      });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const { value, error } = schema.validate(formData)
-        console.log('valor' + value, 'error' + error)
+        console.log(formData)
     }
+
+    const {
+        register,
+        formState: { errors }
+      } = useForm({
+        mode: 'onBlur',
+        resolver: joiResolver(schema)
+      });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -121,10 +155,13 @@ const SignForm = () => {
                     <Grid item>
                         <TextField
                             label="Display Name"
+                            {...register('displayName')}
                             name="displayName"
                             value={formData.displayName}
                             variant="standard"
                             onChange={handleChange}
+                            error={!!errors.displayName}
+                            helperText={typeof errors.displayName === 'string' ? errors.displayName : ''}
                             sx={{
                                 width: '18rem',
                                 '&:hover .MuiInput-underline:before': {
@@ -133,14 +170,18 @@ const SignForm = () => {
                             }}
                             margin="normal"
                         />
+                        <p></p>
                     </Grid>
                     <Grid item>
                         <TextField
                             label="Username"
+                            {...register('username')}
                             name="username"
                             value={formData.username}
                             variant="standard"
                             onChange={handleChange}
+                            error={!!errors.username}
+                            helperText={typeof errors.username === 'string' ? errors.username : ''}
                             sx={{
                                 width: '18rem',
                                 '&:hover .MuiInput-underline:before': {
@@ -153,10 +194,13 @@ const SignForm = () => {
                     <Grid item>
                         <TextField
                             label="Email"
+                            {...register('email')}
                             name="email"
                             value={formData.email}
                             variant="standard"
                             onChange={handleChange}
+                            error={!!errors.email}
+                            helperText={typeof errors.email === 'string' ? errors.email : ''}
                             sx={{
                                 width: '18rem',
                                 '&:hover .MuiInput-underline:before': {
@@ -176,10 +220,12 @@ const SignForm = () => {
                                 },
                             }}
                             variant="standard"
+                            error={!!errors.password}
                             >
                             <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
                             <Input
                                 id="standard-adornment-password"
+                                {...register('password')}
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
@@ -188,13 +234,16 @@ const SignForm = () => {
                                 <InputAdornment position="end">
                                     <IconButton
                                     aria-label="toggle password visibility"
-                                    onClick={handleClickShowPassword}
+                                    onClick={handleShowPassword}
                                     >
                                     {showPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
                                 </InputAdornment>
                                 }
                             />
+                            {errors.password && (
+                            <FormHelperText>{typeof errors.password === 'string' ? errors.password : ''}</FormHelperText>
+    )}
                         </FormControl>
                     </Grid>
                     <Grid
@@ -204,7 +253,7 @@ const SignForm = () => {
                         <Checkbox
                             checked={isPressed}
                             sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                            onClick={() => setIsPressed(!isPressed)}
+                            onChange={handleCheckboxChange}
                         />
                         <Link
                             href="/TermsAndCoditions"
@@ -222,7 +271,7 @@ const SignForm = () => {
                             width: '70%',
                             fontSize: '.7rem'
                         }}
-                        disabled={!isPressed}
+                        disabled={!isFormValid}
                         type='submit'
                     >
                         Create account
