@@ -16,6 +16,8 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
 
     const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
+    const [userNameError, setUserNameError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
 
     const containerStyle: React.CSSProperties = {
         display: 'flex',
@@ -48,10 +50,37 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
         margin: '2rem 0'
     }
 
+    const errorTextStyle: React.CSSProperties = {
+        color: 'red',
+        marginTop: '0.5rem',
+    }
+
+    const validateForm = () => {
+        let isValid = true;
+
+        if(!userName){
+            isValid = false;
+            setUserNameError('You must type your name above')
+        }else{
+            setUserNameError('');
+        }
+
+        if(!password){
+            isValid = false;
+            setPasswordError('You must type a password')
+        }else{
+            setPasswordError('')
+        }
+
+        return isValid;
+    }
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
-        onSignIn(userName, password)
+        if(validateForm()){
+            onSignIn(userName, password)
+        }
     };
 
     return (
@@ -68,6 +97,12 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
                     value={userName}
                     onChange={(e) => setUserName(e.target.value)}
                 />
+                <Typography
+                    variant='body2'
+                    style={errorTextStyle}
+                >
+                    {userNameError}
+                </Typography>
                 <TextField
                     style= {textFieldStyle}
                     label= 'Password'
@@ -77,6 +112,12 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                <Typography
+                    variant='body2'
+                    style={errorTextStyle}
+                >
+                    {passwordError}
+                </Typography>
                 <Button
                     style={submitButtonStyle}
                     type='submit'
