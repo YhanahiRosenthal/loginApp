@@ -8,12 +8,12 @@ import {
     textFieldStyle,
     submitButtonStyle
 } from '../styles/styles';
+import { Link } from 'react-router-dom';
 import {
     Container,
     TextField,
     Button,
     Divider,
-    Link,
     Typography,
 } from '@mui/material'
 
@@ -107,7 +107,7 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
                     Sign In
                 </Button>
                 <div style={{ textAlign: 'center' }}>
-                    <span style={{marginRight: '10px'}}>Forgot your password?</span><Link href="/ForgotPassword" >Click here</Link>
+                    <span style={{marginRight: '10px'}}>Forgot your password?</span><Link to="/forgot-password" >Click here</Link>
                 </div>
             </form>
             <Divider
@@ -121,7 +121,7 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <span style={{marginRight: '10px'}}>Don't have an account?</span><Link href="/SignUpForm" >Register</Link>
+                <span style={{marginRight: '10px'}}>Don't have an account?</span> <Link to="/signup" >Register</Link>
             </div>
         </Container>
   )
