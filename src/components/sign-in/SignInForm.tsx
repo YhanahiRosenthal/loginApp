@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 import {
     Container,
     TextField,
     Button,
     Divider,
-    Link,
     Typography,
 } from '@mui/material'
 
@@ -139,7 +139,7 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <span style={{marginRight: '10px'}}>Don't have an account?</span><Link href="/SignUpForm" >Register</Link>
+                <span style={{marginRight: '10px'}}>Don't have an account?</span> <Link to="/SignUp" >Register</Link>
             </div>
         </Container>
   )
