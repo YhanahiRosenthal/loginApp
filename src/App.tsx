@@ -1,4 +1,5 @@
 import './App.css';
+import ForgotPassword from './components/forgot-password/ForgotPassword';
 import SignInForm from './components/sign-in/SignInForm';
 import SignUpForm from './components/sign-up/SignUpForm';
 
@@ -7,6 +8,7 @@ function App() {
     <>
       <SignInForm onSignIn={() => {}}/>
       <SignUpForm />
+      <ForgotPassword />
     </>
   );
 }

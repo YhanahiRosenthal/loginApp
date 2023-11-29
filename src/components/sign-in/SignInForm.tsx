@@ -1,4 +1,13 @@
 import React, { useState } from 'react'
+import { useForm } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+import Joi from 'joi';
+import {
+    containerStyle,
+    formStyle,
+    textFieldStyle,
+    submitButtonStyle
+} from '../styles/styles';
 import {
     Container,
     TextField,
@@ -8,116 +17,86 @@ import {
     Typography,
 } from '@mui/material'
 
+
+const schema = Joi.object({
+    email: Joi.string()
+        .required()
+        .email({minDomainSegments: 2, tlds: { allow: ['com', 'net']}})
+        .messages({
+            'string.base': 'Email must be a text string',
+            'string.empty': 'Email is a required field',
+            'string.email': 'Email must be a valid email address',
+            'string.minDomainSegments': 'Email must have at least 2 domain segments',
+            'string.tlds.allow': 'Email must have a valid top-level domain (.com or .net)'
+        }),
+    password: Joi.string()
+        .min(8)
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
+        .required()
+        .messages({
+            'string.pattern.base':
+            'Password must contain at least one lowercase letter, one uppercase letter, and one digit',
+            'string.min': 'The password must be at least 8 characters long',
+            'string.empty': 'The password field is required'
+        }),
+});
+
 interface SignInFormProps {
     onSignIn: (username: string, password: string) => void;
 }
 
 const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
 
-    const [userName, setUserName] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userNameError, setUserNameError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
 
-    const containerStyle: React.CSSProperties = {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        width:"30%",
-        padding:'2rem',
-        borderRadius:'.2rem',
-        boxShadow:'0 0 1rem #5c5e5f',
-        margin:'auto',
-        marginTop:'4rem',
-        marginBottom:'4rem'
-    };
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+      } = useForm({
+        mode: 'onBlur',
+        resolver: joiResolver(schema)
+      });
 
-    const formStyle: React.CSSProperties = {
-        display : 'flex',
-        flexDirection : 'column',
-        maxWidth: '300px',
-        margin: 'auto',
-        marginTop: '2rem',
-    };
-
-    const textFieldStyle: React.CSSProperties = {
-        minWidth: '18rem',
-        margin: '1rem 0'
-    }
-
-    const submitButtonStyle: React.CSSProperties = {
-        margin: '2rem 0'
-    }
-
-    const errorTextStyle: React.CSSProperties = {
-        color: 'red',
-        marginTop: '0.5rem',
-    }
-
-    const validateForm = () => {
-        let isValid = true;
-
-        if(!userName){
-            isValid = false;
-            setUserNameError('You must type your name above')
-        }else{
-            setUserNameError('');
+    const onSubmit = (data: any) => {
+        if (Object.values(errors).length === 0) {
+            const loginFormData = data;
+            console.log('Data form:', loginFormData);
         }
-
-        if(!password){
-            isValid = false;
-            setPasswordError('You must type a password')
-        }else{
-            setPasswordError('')
-        }
-
-        return isValid;
     }
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if(validateForm()){
-            onSignIn(userName, password)
-        }
-    };
 
     return (
         <Container style={containerStyle}>
-            <form style={formStyle} onSubmit={handleSubmit}>
+            <form style={formStyle} onSubmit={handleSubmit(onSubmit)}>
                 <Typography variant='h4' align='center'>
                     Sign In
                 </Typography>
                 <TextField
                     style= {textFieldStyle}
-                    label= 'Username'
+                    label= 'Email'
+                    {...register('email')}
+                    name='email'
                     variant='standard'
                     fullWidth
-                    value={userName}
-                    onChange={(e) => setUserName(e.target.value)}
+                    error={!!errors.email}
+                    helperText={errors.email?.message ? errors.email.message.toString() : ''}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
-                <Typography
-                    variant='body2'
-                    style={errorTextStyle}
-                >
-                    {userNameError}
-                </Typography>
                 <TextField
                     style= {textFieldStyle}
                     label= 'Password'
+                    {...register('password')}
+                    name='password'
                     variant='standard'
                     fullWidth
+                    error={!!errors.password}
+                    helperText={errors.password?.message ? errors.password.message.toString() : ''}
                     type='password'
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                <Typography
-                    variant='body2'
-                    style={errorTextStyle}
-                >
-                    {passwordError}
-                </Typography>
                 <Button
                     style={submitButtonStyle}
                     type='submit'
@@ -127,6 +106,9 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
                 >
                     Sign In
                 </Button>
+                <div style={{ textAlign: 'center' }}>
+                    <span style={{marginRight: '10px'}}>Forgot your password?</span><Link href="/ForgotPassword" >Click here</Link>
+                </div>
             </form>
             <Divider
                     variant="middle"
