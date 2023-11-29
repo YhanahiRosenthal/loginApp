@@ -2,7 +2,6 @@ import { FormHelperText, Grid, TextField, Typography } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import Link from '@mui/material/Link';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
@@ -10,6 +9,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -297,10 +297,8 @@ const SignForm = () => {
                             onChange={handleCheckboxChange}
                         />
                         <Link
-                            href="/TermsAndCoditions"
-                            rel="noopener"
-                            variant="body2"
-                            color="inherit"
+                            to="/TermsAndCoditions"
+                            style={{color: 'black'}}
                             >
                             Do you agree to terms and privacy policy?
                         </Link>
@@ -329,7 +327,7 @@ const SignForm = () => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <Link href="/Login" >Do you have an account? Login</Link>
+                <Link to="/Login" >Do you have an account? Login</Link>
             </div>
         </Grid>
     );
