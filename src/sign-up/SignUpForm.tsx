@@ -41,7 +41,6 @@ const SignForm = () => {
 
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { checked } = e.target;
-        console.log(e.target.checked)
         setIsPressed(checked);
         setFormData({ ...formData, termsAndConditions: checked });
     };
@@ -50,6 +49,7 @@ const SignForm = () => {
 
         const isAllFieldsFilled = Object.values(formData).every(value => !!value);
         setIsFormValid(isAllFieldsFilled && isPressed);
+
     }, [formData, isPressed]);
 
     const schema = Joi.object({
@@ -94,7 +94,7 @@ const SignForm = () => {
         password:
             Joi.string()
                 .min(8)
-                // .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
+                .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-!@#$%^&*()_+|~=`{}[\]:";'<>?,./])[a-zA-Z\d-!@#$%^&*()_+|~=`{}[\]:";'<>?,./]{8,}$/)
                 .required()
                 .messages({
                 'string.pattern.base':
@@ -115,7 +115,12 @@ const SignForm = () => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
+        const { error } = schema.validate(formData)
+        if(error){
+            console.log('MessageError: There are error yet')
+        }
         console.log(formData)
+
     }
 
     const {
@@ -133,6 +138,10 @@ const SignForm = () => {
 
     return (
         <Grid
+            sx={{
+                minWidth: '390px',
+                maxWidth: '500px'
+            }}
             width="30%"
             padding='2rem'
             borderRadius='.2rem'
@@ -152,7 +161,15 @@ const SignForm = () => {
                     justifyContent="center"
                     alignItems="center"
                     >
-                    <Grid item>
+                    <Grid
+                        item
+                        xs={12}
+                        md={6}
+                        sx={{
+                            minWidth: '18rem',
+                            maxWidth: '500px'
+                        }}
+                        >
                         <TextField
                             label="Display Name"
                             {...register('displayName')}
@@ -161,18 +178,25 @@ const SignForm = () => {
                             variant="standard"
                             onChange={handleChange}
                             error={!!errors.displayName}
-                            helperText={typeof errors.displayName === 'string' ? errors.displayName : ''}
+                            helperText={errors.displayName?.message ? errors.displayName.message.toString() : ''}
                             sx={{
-                                width: '18rem',
+                                width: '100%',
                                 '&:hover .MuiInput-underline:before': {
                                 borderBottomColor: '#9aa2c1',
                                 },
                             }}
                             margin="normal"
                         />
-                        <p></p>
                     </Grid>
-                    <Grid item>
+                    <Grid
+                        item
+                        xs={12}
+                        md={6}
+                        sx={{
+                            minWidth: '18rem',
+                            maxWidth: '500px'
+                        }}
+                        >
                         <TextField
                             label="Username"
                             {...register('username')}
@@ -181,9 +205,9 @@ const SignForm = () => {
                             variant="standard"
                             onChange={handleChange}
                             error={!!errors.username}
-                            helperText={typeof errors.username === 'string' ? errors.username : ''}
+                            helperText={errors.username?.message ? errors.username.message.toString() : ''}
                             sx={{
-                                width: '18rem',
+                                width: '100%',
                                 '&:hover .MuiInput-underline:before': {
                                 borderBottomColor: '#9aa2c1',
                                 },
@@ -191,7 +215,15 @@ const SignForm = () => {
                             margin="normal"
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid
+                        item
+                        xs={12}
+                        md={6}
+                        sx={{
+                            minWidth: '18rem',
+                            maxWidth: '500px'
+                        }}
+                        >
                         <TextField
                             label="Email"
                             {...register('email')}
@@ -200,9 +232,9 @@ const SignForm = () => {
                             variant="standard"
                             onChange={handleChange}
                             error={!!errors.email}
-                            helperText={typeof errors.email === 'string' ? errors.email : ''}
+                            helperText={errors.email?.message ? errors.email.message.toString() : ''}
                             sx={{
-                                width: '18rem',
+                                width: '100%',
                                 '&:hover .MuiInput-underline:before': {
                                 borderBottomColor: '#9aa2c1',
                                 },
@@ -210,11 +242,19 @@ const SignForm = () => {
                             margin="normal"
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid
+                        item
+                        xs={12}
+                        md={6}
+                        sx={{
+                            minWidth: '18rem',
+                            maxWidth: '500px'
+                        }}
+                        >
                         <FormControl
                             sx={{
                                 m:1 ,
-                                width: '18rem',
+                                width: '100%',
                                 '&:hover .MuiInput-underline:before': {
                                 borderBottomColor: '#9aa2c1',
                                 },
@@ -242,7 +282,7 @@ const SignForm = () => {
                                 }
                             />
                             {errors.password && (
-                            <FormHelperText>{typeof errors.password === 'string' ? errors.password : ''}</FormHelperText>
+                            <FormHelperText>{errors.password?.message ? errors.password.message.toString() : ''}</FormHelperText>
     )}
                         </FormControl>
                     </Grid>
