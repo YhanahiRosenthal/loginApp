@@ -297,7 +297,7 @@ const SignForm = () => {
                             onChange={handleCheckboxChange}
                         />
                         <Link
-                            to="/TermsAndCoditions"
+                            to="/terms-and-coditions"
                             style={{color: 'black'}}
                             >
                             Do you agree to terms and privacy policy?
@@ -327,7 +327,7 @@ const SignForm = () => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <Link to="/Login" >Do you have an account? Login</Link>
+                <Link to="/login" >Do you have an account? Login</Link>
             </div>
         </Grid>
     );
