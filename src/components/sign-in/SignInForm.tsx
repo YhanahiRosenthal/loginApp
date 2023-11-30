@@ -6,7 +6,8 @@ import {
     containerStyle,
     formStyle,
     textFieldStyle,
-    submitButtonStyle
+    submitButtonStyle,
+    formStringsStyle
 } from '../styles/styles';
 import { Link } from 'react-router-dom';
 import {
@@ -67,7 +68,12 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
     }
 
     return (
-        <Container style={containerStyle}>
+        <Container
+        sx={{
+            minWidth: '24rem',
+            maxWidth: '31rem'
+        }}
+        style={containerStyle}>
             <form style={formStyle} onSubmit={handleSubmit(onSubmit)}>
                 <Typography variant='h4' align='center'>
                     Sign In
@@ -107,7 +113,7 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
                     Sign In
                 </Button>
                 <div style={{ textAlign: 'center' }}>
-                    <span style={{marginRight: '10px'}}>Forgot your password?</span><Link to="/forgot-password" >Click here</Link>
+                    <span style={formStringsStyle}>Forgot your password?</span><Link style={formStringsStyle} to="/forgot-password" >Click here</Link>
                 </div>
             </form>
             <Divider
@@ -121,7 +127,7 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <span style={{marginRight: '10px'}}>Don't have an account?</span> <Link to="/signup" >Register</Link>
+                <span style={formStringsStyle}>Don't have an account?</span> <Link style={formStringsStyle} to="/signup" >Register</Link>
             </div>
         </Container>
   )

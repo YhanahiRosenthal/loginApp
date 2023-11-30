@@ -60,7 +60,12 @@ const ForgotPassword = () => {
     }
 
   return (
-    <Container style={containerStyle}>
+    <Container
+    sx={{
+        minWidth: '24rem',
+        maxWidth: '31rem'
+    }}
+    style={containerStyle}>
     <form style={formStyle} onSubmit={handleSubmit(onSubmitForgot)}>
         <Typography variant='h4' align='center'>
             Recover Your Password

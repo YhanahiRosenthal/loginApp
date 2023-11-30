@@ -298,7 +298,7 @@ const SignForm = () => {
                         />
                         <Link
                             to="/terms-and-coditions"
-                            style={{color: 'black'}}
+                            style={{color: 'black', fontSize: '13px'}}
                             >
                             Do you agree to terms and privacy policy?
                         </Link>
@@ -327,7 +327,7 @@ const SignForm = () => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <Link to="/login" >Do you have an account? Login</Link>
+                <Link style={{fontSize: '13px'}} to="/login" >Do you have an account? Login</Link>
             </div>
         </Grid>
     );
