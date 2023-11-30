@@ -255,6 +255,7 @@ const SignForm = () => {
                             sx={{
                                 m:1 ,
                                 width: '100%',
+                                maxWidth: '17rem',
                                 margin: 0,
                                 '&:hover .MuiInput-underline:before': {
                                 borderBottomColor: '#9aa2c1',
@@ -297,8 +298,8 @@ const SignForm = () => {
                             onChange={handleCheckboxChange}
                         />
                         <Link
-                            to="/TermsAndCoditions"
-                            style={{color: 'black'}}
+                            to="/terms-and-coditions"
+                            style={{color: 'black', fontSize: '13px'}}
                             >
                             Do you agree to terms and privacy policy?
                         </Link>
@@ -327,7 +328,7 @@ const SignForm = () => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <Link to="/Login" >Do you have an account? Login</Link>
+                <Link style={{fontSize: '13px'}} to="/login" >Do you have an account? Login</Link>
             </div>
         </Grid>
     );

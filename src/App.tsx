@@ -1,4 +1,5 @@
 import './App.css';
+import ForgotPassword from './components/forgot-password/ForgotPassword';
 import TermsAndConditions from './components/TermsAndConditions/TermsAndCoditions';
 import SignInForm from './components/sign-in/SignInForm';
 import SignUpForm from './components/sign-up/SignUpForm';
@@ -9,9 +10,10 @@ function App() {
     <BrowserRouter>
       <Routes>
           <Route path='/' element={<SignInForm onSignIn={() => {}}/>} />
-          <Route path='/Login' element={<SignInForm onSignIn={() => {}}/>} />
-          <Route path='/SignUp' element={<SignUpForm />} />
-          <Route path='/TermsAndCoditions' element={<TermsAndConditions />} />
+          <Route path='/login' element={<SignInForm onSignIn={() => {}}/>} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/signup' element={<SignUpForm />} />
+          <Route path='/terms-and-coditions' element={<TermsAndConditions />} />
       </Routes>
     </BrowserRouter>
   );
