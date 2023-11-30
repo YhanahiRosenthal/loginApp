@@ -255,6 +255,7 @@ const SignForm = () => {
                             sx={{
                                 m:1 ,
                                 width: '100%',
+                                maxWidth: '17rem',
                                 margin: 0,
                                 '&:hover .MuiInput-underline:before': {
                                 borderBottomColor: '#9aa2c1',
