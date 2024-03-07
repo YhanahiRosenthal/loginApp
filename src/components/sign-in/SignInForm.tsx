@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
+import { useAxiosPost } from '../useHooks/UseFetch';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Joi from 'joi';
 import {
@@ -20,19 +21,15 @@ import {
 
 
 const schema = Joi.object({
-    email: Joi.string()
+    username: Joi.string()
         .required()
-        .email({minDomainSegments: 2, tlds: { allow: ['com', 'net']}})
         .messages({
-            'string.base': 'Email must be a text string',
-            'string.empty': 'Email is a required field',
-            'string.email': 'Email must be a valid email address',
-            'string.minDomainSegments': 'Email must have at least 2 domain segments',
-            'string.tlds.allow': 'Email must have a valid top-level domain (.com or .net)'
+            'string.base': 'Username must be a text string',
+            'string.empty': 'Username is a required field',
         }),
     password: Joi.string()
         .min(8)
-        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/)
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-!@#$%^&*()_+|~=`{}[\]:";'<>?,./])[a-zA-Z\d-!@#$%^&*()_+|~=`{}[\]:";'<>?,./]{8,}$/)
         .required()
         .messages({
             'string.pattern.base':
@@ -48,8 +45,10 @@ interface SignInFormProps {
 
 const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
 
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const { postData, apiData } = useAxiosPost();
 
     const {
         register,
@@ -63,7 +62,8 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
     const onSubmit = (data: any) => {
         if (Object.values(errors).length === 0) {
             const loginFormData = data;
-            console.log('Data form:', loginFormData);
+            postData(`${process.env.REACT_APP_API_URL}/users/authorize`, loginFormData);
+            console.log(apiData);
         }
     }
 
@@ -80,15 +80,15 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
                 </Typography>
                 <TextField
                     style= {textFieldStyle}
-                    label= 'Email'
-                    {...register('email')}
-                    name='email'
+                    label= 'Username'
+                    {...register('username')}
+                    name='username'
                     variant='standard'
                     fullWidth
-                    error={!!errors.email}
-                    helperText={errors.email?.message ? errors.email.message.toString() : ''}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    error={!!errors.username}
+                    helperText={errors.username?.message ? errors.username.message.toString() : ''}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                 />
                 <TextField
                     style= {textFieldStyle}

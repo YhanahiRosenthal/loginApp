@@ -1,17 +1,57 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const useFetchAPIToken = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiToken, setApiToken] = useState(null);
+  const [serverError, setServerError] = useState(null);
+
+  const fetchToken = async () => {
+
+    const config = {
+      method: 'GET',
+      url: `${process.env.REACT_APP_API_URL}/getToken/1`,
+    };
+
+
+    setIsLoading(true);
+    try {
+      const {data: response} = await axios(config);
+      setApiToken(response);
+      setIsLoading(false);
+    } catch (error: any) {
+      setServerError(error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchToken();
+  }, []);
+
+  useEffect(() => {
+    console.log({
+      apiData: apiToken,
+      isLoading: isLoading,
+      serverError:serverError
+    })
+  }, [apiToken, isLoading, serverError]);
+
+  return { isLoading, apiToken, serverError };
+}
+
 const useAxiosFetch = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [apiData, setApiData] = useState(null);
     const [serverError, setServerError] = useState(null);
+    const { apiToken } = useFetchAPIToken();
 
     const fetchData = async (url: any, headers?:any,) => {
 
       const config = {
         method: 'GET',
         url: url,
-        headers: headers,
+        headers: {"X-APIKEY": apiToken!},
       };
 
 
@@ -42,14 +82,15 @@ const useAxiosPost = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [apiData, setApiData] = useState(null);
   const [serverError, setServerError] = useState(null);
+  const { apiToken } = useFetchAPIToken();
 
-  const postData = async (url: any, body?: any, headers?:any,) => {
+  const postData = async (url: any, body?: any) => {
     setIsLoading(true);
     try {
       const config = {
         method: 'POST',
         url: url,
-        headers:headers,
+        headers: {"X-APIKEY": apiToken!},
         data: body,
       };
 

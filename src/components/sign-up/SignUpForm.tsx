@@ -30,7 +30,7 @@ const SignForm = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
 
-    const { postData } = useAxiosPost();
+    const { postData, apiData } = useAxiosPost();
 
     const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -122,8 +122,8 @@ const SignForm = () => {
         if(error){
             console.log('MessageError: There are error yet')
         }
-        postData(`${process.env.REACT_APP_API_URL}/`)
-
+        postData(`${process.env.REACT_APP_API_URL}/users`, formData);
+        console.log(apiData);
     }
 
     const {
