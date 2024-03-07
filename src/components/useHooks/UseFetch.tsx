@@ -1,43 +1,117 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const UseFetch = (url: any) => {
+const useFetchAPIToken = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiToken, setApiToken] = useState(null);
+  const [serverError, setServerError] = useState(null);
 
+  const fetchToken = async () => {
+
+    const config = {
+      method: 'GET',
+      url: `${process.env.REACT_APP_API_URL}/getToken/1`,
+    };
+
+
+    setIsLoading(true);
+    try {
+      const {data: response} = await axios(config);
+      setApiToken(response);
+      setIsLoading(false);
+    } catch (error: any) {
+      setServerError(error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchToken();
+  }, []);
+
+  useEffect(() => {
+    console.log({
+      apiData: apiToken,
+      isLoading: isLoading,
+      serverError:serverError
+    })
+  }, [apiToken, isLoading, serverError]);
+
+  return { isLoading, apiToken, serverError };
+}
+
+const useAxiosFetch = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [apiData, setApiData] = useState(null);
     const [serverError, setServerError] = useState(null);
-    const abortController = new AbortController();
+    const { apiToken } = useFetchAPIToken();
+
+    const fetchData = async (url: any, headers?:any,) => {
+
+      const config = {
+        method: 'GET',
+        url: url,
+        headers: {"X-APIKEY": apiToken!},
+      };
+
+
+      setIsLoading(true);
+      try {
+        const {data: response} = await axios(config);
+        setApiData(response);
+        setIsLoading(false);
+      } catch (error: any) {
+        setServerError(error);
+        setIsLoading(false);
+      }
+    };
 
     useEffect(() => {
-        setIsLoading(true);
-        const fetchData = async () => {
-          try {
-            const resp = await axios.get(url, {
-              signal: abortController.signal
-            });
-            const data = await resp?.data;
+      console.log({
+        apiData: apiData,
+        isLoading: isLoading,
+        serverError:serverError
+      })
+    }, [apiData, isLoading, serverError]);
 
-            setApiData(data);
-            setIsLoading(false);
-          } catch (error: any) {
-            if (error.name === 'AbortError') {
-              console.error(error.message);
-            } else {
-              setServerError(error);
-              setIsLoading(false);
-            }
-          }
-        };
-
-        fetchData();
-
-        return () => {
-          abortController.abort();
-        }
-
-      }, [url]);
-
-      return { isLoading, apiData, serverError };
+      return { fetchData, isLoading, apiData, serverError };
 }
 
-export default UseFetch;
+const useAxiosPost = () => {
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiData, setApiData] = useState(null);
+  const [serverError, setServerError] = useState(null);
+  const { apiToken } = useFetchAPIToken();
+
+  const postData = async (url: any, body?: any) => {
+    setIsLoading(true);
+    try {
+      const config = {
+        method: 'POST',
+        url: url,
+        headers: {"X-APIKEY": apiToken!},
+        data: body,
+      };
+
+      const { data: response } = await axios(config);
+      setApiData(response);
+      setIsLoading(false);
+    } catch (error: any) {
+      setServerError(error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log({
+      apiData: apiData,
+      isLoading: isLoading,
+      serverError:serverError
+    })
+  }, [apiData, isLoading, serverError]);
+
+  return { postData, isLoading, apiData, serverError };
+}
+
+export {useAxiosFetch, useAxiosPost};
