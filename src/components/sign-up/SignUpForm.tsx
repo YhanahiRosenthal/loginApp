@@ -14,6 +14,7 @@ import { useState, useEffect } from 'react';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useForm } from 'react-hook-form';
+import { useAxiosPost } from '../useHooks/UseFetch';
 
 interface FormData {
     displayName: string;
@@ -28,6 +29,8 @@ const SignForm = () => {
     const [isPressed, setIsPressed] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
+
+    const { postData } = useAxiosPost();
 
     const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -119,7 +122,7 @@ const SignForm = () => {
         if(error){
             console.log('MessageError: There are error yet')
         }
-        console.log(formData)
+        postData(`${process.env.REACT_APP_API_URL}/`)
 
     }
 
