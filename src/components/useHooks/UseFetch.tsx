@@ -11,6 +11,7 @@ const useFetchAPIToken = () => {
     const config = {
       method: 'GET',
       url: `${process.env.REACT_APP_API_URL}/getToken/1`,
+      withCredentials: true 
     };
 
 
@@ -52,6 +53,7 @@ const useAxiosFetch = () => {
         method: 'GET',
         url: url,
         headers: {"X-APIKEY": apiToken!},
+        withCredentials: true 
       };
 
 
@@ -92,11 +94,18 @@ const useAxiosPost = () => {
         url: url,
         headers: {"X-APIKEY": apiToken!},
         data: body,
+        withCredentials: true 
       };
-
+      // console.log('APIToken', apiToken)
       const { data: response } = await axios(config);
-      setApiData(response);
+      console.log('ResponseX', response);
       setIsLoading(false);
+      if (response.success){
+        window.location = response.appUrl;
+        return;
+      }
+      // setApiData(response);
+      
     } catch (error: any) {
       setServerError(error);
       setIsLoading(false);
