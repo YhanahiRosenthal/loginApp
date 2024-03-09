@@ -101,7 +101,7 @@ const useAxiosPost = () => {
       console.log('ResponseX', response);
       setIsLoading(false);
       if (response.success){
-        window.location = response.appUrl;
+        window.location = response.message.appUrl;
         return;
       }
       // setApiData(response);
