@@ -10,11 +10,11 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useForm } from 'react-hook-form';
-import { useAxiosPost } from '../useHooks/UseFetch';
+import { HttpMethods, useFetch } from '../useHooks/UseFetch';
 
 interface FormData {
     displayName: string;
@@ -24,13 +24,17 @@ interface FormData {
     termsAndConditions: Boolean;
   }
 
-const SignForm = () => {
+  interface SignUpFormProps {
+    apiToken: string;
+}
+
+const SignForm: React.FC<SignUpFormProps> = ({apiToken}) => {
 
     const [isPressed, setIsPressed] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
 
-    const { postData, apiData } = useAxiosPost();
+    const { fetchData, apiData, error } = useFetch();
 
     const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -122,8 +126,19 @@ const SignForm = () => {
         if(error){
             console.log('MessageError: There are error yet')
         }
-        postData(`${process.env.REACT_APP_API_URL}/users`, formData);
-        console.log(apiData);
+        fetchData(
+            `${process.env.REACT_APP_API_URL}/users`,
+            HttpMethods.POST,
+            {
+                "X-APIKEY": apiToken
+            },
+            formData
+          );
+        if(error){
+            console.log(error);
+        }else{
+            console.log(apiData);
+        }
     }
 
     const {

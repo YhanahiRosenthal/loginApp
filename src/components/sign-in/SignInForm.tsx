@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
+import { HttpMethods, useFetch } from '../useHooks/UseFetch';
 import { useForm } from 'react-hook-form';
-import { useAxiosPost } from '../useHooks/UseFetch';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Joi from 'joi';
 import {
@@ -40,15 +40,15 @@ const schema = Joi.object({
 });
 
 interface SignInFormProps {
-    onSignIn: (username: string, password: string) => void;
+    apiToken: string;
 }
 
-const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
+const SignInForm: React.FC<SignInFormProps> = ({apiToken}) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const { postData, apiData } = useAxiosPost();
+    const { fetchData: fetchLogin, apiData: loginData, error } = useFetch();
 
     const {
         register,
@@ -61,9 +61,20 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
 
     const onSubmit = (data: any) => {
         if (Object.values(errors).length === 0) {
-            const loginFormData = data;
-            postData(`${process.env.REACT_APP_API_URL}/users/authorize`, loginFormData);
-            console.log(apiData);
+            console.log("LALALALALA", data)
+            fetchLogin(
+                `${process.env.REACT_APP_API_URL}/users/authorize`,
+                HttpMethods.POST,
+                {
+                    "X-APIKEY": apiToken
+                },
+                data
+              );
+            if(error){
+                console.log(error);
+            }else{
+                console.log(loginData);
+            }
         }
     }
 
