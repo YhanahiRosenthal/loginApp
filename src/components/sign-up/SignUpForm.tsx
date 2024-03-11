@@ -120,6 +120,14 @@ const SignForm: React.FC<SignUpFormProps> = ({apiToken}) => {
                 }),
     })
 
+    useEffect(() => {
+        if(error){
+          console.log(error);
+        }else{
+          console.log(apiData);
+        }
+      }, [error, apiData])
+
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const { error } = schema.validate(formData)

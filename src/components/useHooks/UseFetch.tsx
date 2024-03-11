@@ -27,7 +27,8 @@ const useFetch = () => {
       method: method,
       url: url,
       headers: headers,
-      body: body,
+      data: body,
+      timeout: 15000,
       withCredentials:true
     };
     console.log(config);

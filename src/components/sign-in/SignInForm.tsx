@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { HttpMethods, useFetch } from '../useHooks/UseFetch';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -48,7 +48,7 @@ const SignInForm: React.FC<SignInFormProps> = ({apiToken}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const { fetchData: fetchLogin, apiData: loginData, error } = useFetch();
+    const { fetchData, apiData, error } = useFetch();
 
     const {
         register,
@@ -59,10 +59,17 @@ const SignInForm: React.FC<SignInFormProps> = ({apiToken}) => {
         resolver: joiResolver(schema)
       });
 
+    useEffect(() => {
+      if(error){
+        console.log(error);
+      }else{
+        console.log(apiData);
+      }
+    }, [error, apiData]);
+
     const onSubmit = (data: any) => {
         if (Object.values(errors).length === 0) {
-            console.log("LALALALALA", data)
-            fetchLogin(
+            fetchData(
                 `${process.env.REACT_APP_API_URL}/users/authorize`,
                 HttpMethods.POST,
                 {
@@ -70,11 +77,6 @@ const SignInForm: React.FC<SignInFormProps> = ({apiToken}) => {
                 },
                 data
               );
-            if(error){
-                console.log(error);
-            }else{
-                console.log(loginData);
-            }
         }
     }
 
