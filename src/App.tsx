@@ -10,11 +10,11 @@ import { HttpMethods , useFetch } from './components/useHooks/UseFetch';
 
 function App() {
 
-  const { fetchData: fetchToken, apiData, error } = useFetch();
+  const fetchAxios = useFetch();
   const [apiToken, setApiToken] = useState<string>('');
 
   useEffect(() => {
-    fetchToken(
+    fetchAxios.fetchData(
       `${process.env.REACT_APP_API_URL}/getToken/1`,
       HttpMethods.GET,
     );
@@ -22,13 +22,13 @@ function App() {
 
 
   useEffect(() => {
-    if(apiData){
-      setApiToken(apiData);
+    if(fetchAxios.apiData){
+      setApiToken(fetchAxios.apiData);
     }
-    if(error){
-      setApiToken(error);
+    if(fetchAxios.error){
+      setApiToken(fetchAxios.error);
     }
-  }, [apiData, error])
+  }, [fetchAxios.apiData, fetchAxios.error])
   
   console.log(apiToken);
 

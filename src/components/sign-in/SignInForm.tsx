@@ -48,7 +48,7 @@ const SignInForm: React.FC<SignInFormProps> = ({apiToken}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const { fetchData, apiData, error } = useFetch();
+    const fetchAxios = useFetch();
 
     const {
         register,
@@ -60,16 +60,16 @@ const SignInForm: React.FC<SignInFormProps> = ({apiToken}) => {
       });
 
     useEffect(() => {
-      if(error){
-        console.log(error);
+      if(fetchAxios.error){
+        console.log(fetchAxios.error);
       }else{
-        console.log(apiData);
+        console.log(fetchAxios.apiData);
       }
-    }, [error, apiData]);
+    }, [fetchAxios.error, fetchAxios.apiData]);
 
     const onSubmit = (data: any) => {
         if (Object.values(errors).length === 0) {
-            fetchData(
+            fetchAxios.fetchData(
                 `${process.env.REACT_APP_API_URL}/users/authorize`,
                 HttpMethods.POST,
                 {

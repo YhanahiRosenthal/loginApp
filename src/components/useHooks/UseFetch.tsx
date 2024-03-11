@@ -44,13 +44,6 @@ const useFetch = () => {
     } finally {
       setIsLoading(false);
     }
-
-      console.log({
-        apiData: apiData,
-        isLoading: isLoading,
-        success: success,
-        errorData:error,
-    });
 }
 
   useEffect(() => {

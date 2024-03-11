@@ -34,7 +34,7 @@ const SignForm: React.FC<SignUpFormProps> = ({apiToken}) => {
     const [showPassword, setShowPassword] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
 
-    const { fetchData, apiData, error } = useFetch();
+    const fetchAxios = useFetch();
 
     const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -121,12 +121,12 @@ const SignForm: React.FC<SignUpFormProps> = ({apiToken}) => {
     })
 
     useEffect(() => {
-        if(error){
-          console.log(error);
+        if(fetchAxios.error){
+          console.log(fetchAxios.error);
         }else{
-          console.log(apiData);
+          console.log(fetchAxios.apiData);
         }
-      }, [error, apiData])
+      }, [fetchAxios.error, fetchAxios.apiData])
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -134,7 +134,7 @@ const SignForm: React.FC<SignUpFormProps> = ({apiToken}) => {
         if(error){
             console.log('MessageError: There are error yet')
         }
-        fetchData(
+        fetchAxios.fetchData(
             `${process.env.REACT_APP_API_URL}/users`,
             HttpMethods.POST,
             {
@@ -143,9 +143,9 @@ const SignForm: React.FC<SignUpFormProps> = ({apiToken}) => {
             formData
           );
         if(error){
-            console.log(error);
+            console.log(fetchAxios.error);
         }else{
-            console.log(apiData);
+            console.log(fetchAxios.apiData);
         }
     }
 
