@@ -353,6 +353,11 @@ const SignForm: React.FC<SignUpFormProps> = ({fetchAxios, apiToken}) => {
             <div style={{ textAlign: 'center' }}>
                 <Link style={{fontSize: '13px'}} to="/login" >Do you have an account? Login</Link>
             </div>
+            {fetchAxios.error &&
+                <div>
+                    <p style={{color: 'red', fontSize: '12px', textAlign: 'center'}}>{fetchAxios.error.message}</p>
+                </div>
+            }
         </Grid>
     );
 };

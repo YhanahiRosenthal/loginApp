@@ -139,6 +139,11 @@ const SignInForm: React.FC<SignInFormProps> = ({fetchAxios, apiToken}) => {
             <div style={{ textAlign: 'center' }}>
                 <span style={formStringsStyle}>Don't have an account?</span> <Link style={formStringsStyle} to="/signup" >Register</Link>
             </div>
+            {fetchAxios.error &&
+                <div>
+                    <p style={{color: 'red', fontSize: '12px', textAlign: 'center'}}>{fetchAxios.error.message}</p>
+                </div>
+            }
         </Container>
   )
 }
