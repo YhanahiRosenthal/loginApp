@@ -10,7 +10,7 @@ import { HttpMethods , useFetch } from './components/useHooks/UseFetch';
 
 function App() {
 
-  const fetchAxios = useFetch();
+  const fetchHandler = useFetch();
   const [apiToken, setApiToken] = useState<string>('');
 
   const callback = (data:string) => {
@@ -20,7 +20,7 @@ function App() {
   }
 
   useEffect(() => {
-    fetchAxios.fetchData(
+    fetchHandler.fetchData(
       `${process.env.REACT_APP_API_URL}/getToken/1`,
       HttpMethods.GET,
       {},
@@ -29,16 +29,37 @@ function App() {
     );
   }, [])
 
+  const actionHandler = ({type, payload}:{type:string, payload:any}) => {
+    switch (type){
+      case 'authoriseUser':{
+        const {data, callback} = payload;
+        fetchHandler.fetchData(
+          `${process.env.REACT_APP_API_URL}/users/authorize`,
+          HttpMethods.POST,
+          {
+              "X-APIKEY": apiToken
+          },
+          data,
+          callback
+        );
+        break;
+      }
+    }
+  }
+
   return (
-    <BrowserRouter>
-      <Routes>
-          <Route path='/' element={<SignInForm fetchAxios={fetchAxios} apiToken={apiToken} />} />
-          <Route path='/login' element={<SignInForm fetchAxios={fetchAxios} apiToken={apiToken} />} />
-          <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/signup' element={<SignUpForm fetchAxios={fetchAxios} apiToken={apiToken} />} />
-          <Route path='/terms-and-coditions' element={<TermsAndConditions />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      {/* {fetchHandler.isLoading && <Overlay><>loader here</></Overlay>} // fixed, z-index 999, height:100% to cover all the UI and stop actions while loading */}
+      <BrowserRouter>
+        <Routes>
+            <Route path='/' element={<SignInForm actionHandler={actionHandler} />} />
+            {/* <Route path='/login' element={<SignInForm actionHandler={actionHandler} />} /> */}
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/signup' element={<SignUpForm fetchAxios={fetchHandler} apiToken={apiToken} />} />
+            <Route path='/terms-and-coditions' element={<TermsAndConditions />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

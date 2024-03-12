@@ -16,9 +16,9 @@ enum HttpMethods{
 
 const useFetch = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [apiData, setData] = useState(null);
-  const [error, setError] = useState(null);
+  // const [success, setSuccess] = useState(false);
+  // const [apiData, setData] = useState(null);
+  // const [error, setError] = useState(null);
 
   const source = axios.CancelToken.source();
 
@@ -31,16 +31,18 @@ const useFetch = () => {
       timeout: 15000,
       withCredentials:true
     };
-    console.log(config);
+    // console.log(config);
     setIsLoading(true);
     try {
       const {data: response} = await axios(config);
-      setSuccess(true);
-      setData(response);
-      callback(response);
+      // setSuccess(true);
+      // setData(response);
+      // callback(response);
+      callback(response)
     } catch (error: any) {
-      setSuccess(false);
-      setError(error);
+      // setSuccess(false);
+      // setError(error);
+      callback({success:false,message:error})
 
     } finally {
       setIsLoading(false);
@@ -58,7 +60,7 @@ const cancel = () => {
         cancel();
       };
   }, []);
-  return { fetchData , cancel, isLoading, apiData, success, error };
+  return { fetchData , cancel, isLoading};
   }
 
   export { useFetch, HttpMethods };

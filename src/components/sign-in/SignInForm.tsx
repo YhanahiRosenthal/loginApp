@@ -40,14 +40,14 @@ const schema = Joi.object({
 });
 
 interface SignInFormProps {
-    fetchAxios: any
-    apiToken: string;
+    actionHandler:Function
 }
 
-const SignInForm: React.FC<SignInFormProps> = ({fetchAxios, apiToken}) => {
+const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState();
 
     const {
         register,
@@ -58,22 +58,16 @@ const SignInForm: React.FC<SignInFormProps> = ({fetchAxios, apiToken}) => {
         resolver: joiResolver(schema)
       });
 
-    const onSubmit = (data: any) => {
+    const onSubmit = (dataToSubmit: any) => {
         if (Object.values(errors).length === 0) {
-            const callback = (data: any) => {
-                if(data){
-                    window.location = data.message.appUrl;
+            const callback = (response: any) => {
+                if(response.success){
+                    window.location = response.message.appUrl;
+                }else{
+                    setError(response.message || 'Invalid credentials')
                 }
             }
-            fetchAxios.fetchData(
-                `${process.env.REACT_APP_API_URL}/users/authorize`,
-                HttpMethods.POST,
-                {
-                    "X-APIKEY": apiToken
-                },
-                data,
-                callback
-              );
+            actionHandler({type:'authoriseUser',payload:{callback, data:dataToSubmit}})
         }
     }
 
@@ -139,9 +133,9 @@ const SignInForm: React.FC<SignInFormProps> = ({fetchAxios, apiToken}) => {
             <div style={{ textAlign: 'center' }}>
                 <span style={formStringsStyle}>Don't have an account?</span> <Link style={formStringsStyle} to="/signup" >Register</Link>
             </div>
-            {fetchAxios.error &&
+            {error &&
                 <div>
-                    <p style={{color: 'red', fontSize: '12px', textAlign: 'center'}}>{fetchAxios.error.message}</p>
+                    <p style={{color: 'red', fontSize: '12px', textAlign: 'center'}}>{error}</p>
                 </div>
             }
         </Container>
