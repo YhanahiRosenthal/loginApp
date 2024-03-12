@@ -40,15 +40,14 @@ const schema = Joi.object({
 });
 
 interface SignInFormProps {
+    fetchAxios: any
     apiToken: string;
 }
 
-const SignInForm: React.FC<SignInFormProps> = ({apiToken}) => {
+const SignInForm: React.FC<SignInFormProps> = ({fetchAxios, apiToken}) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
-    const fetchAxios = useFetch();
 
     const {
         register,
@@ -59,23 +58,21 @@ const SignInForm: React.FC<SignInFormProps> = ({apiToken}) => {
         resolver: joiResolver(schema)
       });
 
-    useEffect(() => {
-      if(fetchAxios.error){
-        console.log(fetchAxios.error);
-      }else{
-        console.log(fetchAxios.apiData);
-      }
-    }, [fetchAxios.error, fetchAxios.apiData]);
-
     const onSubmit = (data: any) => {
         if (Object.values(errors).length === 0) {
+            const callback = (data: any) => {
+                if(data){
+                    window.location = data.message.appUrl;
+                }
+            }
             fetchAxios.fetchData(
                 `${process.env.REACT_APP_API_URL}/users/authorize`,
                 HttpMethods.POST,
                 {
                     "X-APIKEY": apiToken
                 },
-                data
+                data,
+                callback
               );
         }
     }

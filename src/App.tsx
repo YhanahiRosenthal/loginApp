@@ -13,32 +13,29 @@ function App() {
   const fetchAxios = useFetch();
   const [apiToken, setApiToken] = useState<string>('');
 
+  const callback = (data:string) => {
+    if(data){
+      setApiToken(data);
+    }
+  }
+
   useEffect(() => {
     fetchAxios.fetchData(
       `${process.env.REACT_APP_API_URL}/getToken/1`,
       HttpMethods.GET,
+      {},
+      {},
+      callback
     );
   }, [])
-
-
-  useEffect(() => {
-    if(fetchAxios.apiData){
-      setApiToken(fetchAxios.apiData);
-    }
-    if(fetchAxios.error){
-      setApiToken(fetchAxios.error);
-    }
-  }, [fetchAxios.apiData, fetchAxios.error])
-  
-  console.log(apiToken);
 
   return (
     <BrowserRouter>
       <Routes>
-          <Route path='/' element={<SignInForm apiToken={apiToken} />} />
-          <Route path='/login' element={<SignInForm apiToken={apiToken} />} />
+          <Route path='/' element={<SignInForm fetchAxios={fetchAxios} apiToken={apiToken} />} />
+          <Route path='/login' element={<SignInForm fetchAxios={fetchAxios} apiToken={apiToken} />} />
           <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='/signup' element={<SignUpForm apiToken={apiToken} />} />
+          <Route path='/signup' element={<SignUpForm fetchAxios={fetchAxios} apiToken={apiToken} />} />
           <Route path='/terms-and-coditions' element={<TermsAndConditions />} />
       </Routes>
     </BrowserRouter>

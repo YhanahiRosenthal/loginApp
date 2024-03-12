@@ -22,12 +22,12 @@ const useFetch = () => {
 
   const source = axios.CancelToken.source();
 
-  const fetchData = async (url: string, method: HttpMethods, headers?: any, body?: any) => {
+  const fetchData = async (url: string, method: HttpMethods, headers?: any, data?: any, callback?: any) => {
     const config: any = {
       method: method,
       url: url,
       headers: headers,
-      data: body,
+      data: data,
       timeout: 15000,
       withCredentials:true
     };
@@ -37,6 +37,7 @@ const useFetch = () => {
       const {data: response} = await axios(config);
       setSuccess(true);
       setData(response);
+      callback(response);
     } catch (error: any) {
       setSuccess(false);
       setError(error);
