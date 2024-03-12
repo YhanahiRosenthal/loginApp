@@ -47,14 +47,18 @@ const useFetch = () => {
     }
 }
 
+const cancel = () => {
+  if(source) {
+    source.cancel('Request canceled')
+  }
+}
+
   useEffect(() => {
       return () => {
-        if (source) {
-          source.cancel('Request canceled.');
-        }
+        cancel();
       };
   }, []);
-  return { fetchData , isLoading, apiData, success, error };
+  return { fetchData , cancel, isLoading, apiData, success, error };
   }
 
   export { useFetch, HttpMethods };
