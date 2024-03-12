@@ -127,7 +127,7 @@ const SignForm: React.FC<SignUpFormProps> = ({fetchAxios, apiToken}) => {
         }
         const callback = (data: any) => {
             if(data){
-                window.location = data.message.appUrl;
+                window.location.href = "/";
             }
         }
         fetchAxios.fetchData(
@@ -139,11 +139,6 @@ const SignForm: React.FC<SignUpFormProps> = ({fetchAxios, apiToken}) => {
             formData,
             callback
           );
-        if(error){
-            console.log(fetchAxios.error);
-        }else{
-            console.log(fetchAxios.apiData);
-        }
     }
 
     const {
