@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { useAxiosPost } from '../useHooks/UseFetch';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Joi from 'joi';
 import {
@@ -40,15 +39,14 @@ const schema = Joi.object({
 });
 
 interface SignInFormProps {
-    onSignIn: (username: string, password: string) => void;
+    actionHandler:Function
 }
 
-const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
+const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
-    const { postData, apiData } = useAxiosPost();
+    const [error, setError] = useState();
 
     const {
         register,
@@ -59,11 +57,16 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
         resolver: joiResolver(schema)
       });
 
-    const onSubmit = (data: any) => {
+    const onSubmit = (dataToSubmit: any) => {
         if (Object.values(errors).length === 0) {
-            const loginFormData = data;
-            postData(`${process.env.REACT_APP_API_URL}/users/authorize`, loginFormData);
-            console.log(apiData);
+            const callback = (response: any) => {
+                if(response.success){
+                    window.location = response.message.appUrl;
+                }else{
+                    setError(response.message.message || 'Invalid credentials');
+                }
+            }
+            actionHandler({type:'authoriseUser',payload:{callback, data:dataToSubmit}})
         }
     }
 
@@ -129,6 +132,11 @@ const SignInForm: React.FC<SignInFormProps> = ({onSignIn}) => {
             <div style={{ textAlign: 'center' }}>
                 <span style={formStringsStyle}>Don't have an account?</span> <Link style={formStringsStyle} to="/signup" >Register</Link>
             </div>
+            {error &&
+                <div>
+                    <p style={{color: 'red', fontSize: '12px', textAlign: 'center'}}>{error}</p>
+                </div>
+            }
         </Container>
   )
 }

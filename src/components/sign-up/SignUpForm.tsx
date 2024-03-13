@@ -10,11 +10,10 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useForm } from 'react-hook-form';
-import { useAxiosPost } from '../useHooks/UseFetch';
 
 interface FormData {
     displayName: string;
@@ -24,13 +23,16 @@ interface FormData {
     termsAndConditions: Boolean;
   }
 
-const SignForm = () => {
+  interface SignUpFormProps {
+    actionHandler: Function
+}
+
+const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
 
     const [isPressed, setIsPressed] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
-
-    const { postData, apiData } = useAxiosPost();
+    const [error, setError] = useState();
 
     const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -122,8 +124,14 @@ const SignForm = () => {
         if(error){
             console.log('MessageError: There are error yet')
         }
-        postData(`${process.env.REACT_APP_API_URL}/users`, formData);
-        console.log(apiData);
+        const callback = (response: any) => {
+            if(response.success){
+                window.location.href = "/";
+            }else{
+                setError(response.message.message || 'Invalid credentials');
+            }
+        }
+        actionHandler({type:'createUser',payload:{callback, data:formData}})
     }
 
     const {
@@ -333,6 +341,11 @@ const SignForm = () => {
             <div style={{ textAlign: 'center' }}>
                 <Link style={{fontSize: '13px'}} to="/login" >Do you have an account? Login</Link>
             </div>
+            {error &&
+                <div>
+                    <p style={{color: 'red', fontSize: '12px', textAlign: 'center'}}>{error}</p>
+                </div>
+            }
         </Grid>
     );
 };
