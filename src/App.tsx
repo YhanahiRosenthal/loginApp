@@ -44,6 +44,19 @@ function App() {
         );
         break;
       }
+      case 'createUser':{
+        const {data, callback} = payload;
+        fetchHandler.fetchData(
+          `${process.env.REACT_APP_API_URL}/users`,
+          HttpMethods.POST,
+          {
+              "X-APIKEY": apiToken
+          },
+          data,
+          callback
+        );
+        break;
+      }
     }
   }
 
@@ -55,7 +68,7 @@ function App() {
             <Route path='/' element={<SignInForm actionHandler={actionHandler} />} />
             {/* <Route path='/login' element={<SignInForm actionHandler={actionHandler} />} /> */}
             <Route path='/forgot-password' element={<ForgotPassword />} />
-            <Route path='/signup' element={<SignUpForm fetchAxios={fetchHandler} apiToken={apiToken} />} />
+            <Route path='/signup' element={<SignUpForm actionHandler={actionHandler} />} />
             <Route path='/terms-and-coditions' element={<TermsAndConditions />} />
         </Routes>
       </BrowserRouter>

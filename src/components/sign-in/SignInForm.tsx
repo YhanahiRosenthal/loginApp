@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { HttpMethods, useFetch } from '../useHooks/UseFetch';
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Joi from 'joi';
@@ -64,7 +63,7 @@ const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
                 if(response.success){
                     window.location = response.message.appUrl;
                 }else{
-                    setError(response.message || 'Invalid credentials')
+                    setError(response.message.message || 'Invalid credentials');
                 }
             }
             actionHandler({type:'authoriseUser',payload:{callback, data:dataToSubmit}})

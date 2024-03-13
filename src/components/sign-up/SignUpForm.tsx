@@ -14,7 +14,6 @@ import React, { useState, useEffect } from 'react';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useForm } from 'react-hook-form';
-import { HttpMethods, useFetch } from '../useHooks/UseFetch';
 
 interface FormData {
     displayName: string;
@@ -25,15 +24,15 @@ interface FormData {
   }
 
   interface SignUpFormProps {
-    fetchAxios: any,
-    apiToken: string;
+    actionHandler: Function
 }
 
-const SignForm: React.FC<SignUpFormProps> = ({fetchAxios, apiToken}) => {
+const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
 
     const [isPressed, setIsPressed] = useState(false)
     const [showPassword, setShowPassword] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
+    const [error, setError] = useState();
 
     const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -125,20 +124,14 @@ const SignForm: React.FC<SignUpFormProps> = ({fetchAxios, apiToken}) => {
         if(error){
             console.log('MessageError: There are error yet')
         }
-        const callback = (data: any) => {
-            if(data){
+        const callback = (response: any) => {
+            if(response.success){
                 window.location.href = "/";
+            }else{
+                setError(response.message.message || 'Invalid credentials');
             }
         }
-        fetchAxios.fetchData(
-            `${process.env.REACT_APP_API_URL}/users`,
-            HttpMethods.POST,
-            {
-                "X-APIKEY": apiToken
-            },
-            formData,
-            callback
-          );
+        actionHandler({type:'createUser',payload:{callback, data:formData}})
     }
 
     const {
@@ -348,9 +341,9 @@ const SignForm: React.FC<SignUpFormProps> = ({fetchAxios, apiToken}) => {
             <div style={{ textAlign: 'center' }}>
                 <Link style={{fontSize: '13px'}} to="/login" >Do you have an account? Login</Link>
             </div>
-            {fetchAxios.error &&
+            {error &&
                 <div>
-                    <p style={{color: 'red', fontSize: '12px', textAlign: 'center'}}>{fetchAxios.error.message}</p>
+                    <p style={{color: 'red', fontSize: '12px', textAlign: 'center'}}>{error}</p>
                 </div>
             }
         </Grid>
