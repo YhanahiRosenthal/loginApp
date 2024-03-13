@@ -1,4 +1,5 @@
 import { FormHelperText, Grid, TextField, Typography } from '@mui/material';
+import { linkStyles } from '../styles/styles';
 import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -9,7 +10,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -126,7 +126,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
         }
         const callback = (response: any) => {
             if(response.success){
-                window.location.href = "/";
+                actionHandler({type: 'activeSignIn', payload:{}});
             }else{
                 setError(response.message.message || 'Invalid credentials');
             }
@@ -308,12 +308,11 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
                             sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                             onChange={handleCheckboxChange}
                         />
-                        <Link
-                            to="/terms-and-coditions"
+                        <span
                             style={{color: 'black', fontSize: '13px'}}
                             >
-                            Do you agree to terms and privacy policy?
-                        </Link>
+                            Do you agree to <span style={linkStyles} onClick= {() => actionHandler({type: 'activeTermsAndConditions', payload:{}})} >terms and privacy policy?</span>
+                        </span>
                     </Grid>
                     <Button
                         variant="contained"
@@ -339,7 +338,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <Link style={{fontSize: '13px'}} to="/login" >Do you have an account? Login</Link>
+                <span style={{fontSize: '13px'}} >Do you have an account? <span style={linkStyles} onClick={() => actionHandler({type:'activeSignIn', payload:{}})}>Login</span></span>
             </div>
             {error &&
                 <div>

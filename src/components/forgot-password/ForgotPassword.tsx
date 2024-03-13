@@ -40,7 +40,11 @@ const schema = Joi.object({
         .required(),
 });
 
-const ForgotPassword = () => {
+interface ForgotPasswordProps {
+    actionHandler: Function
+}
+
+const ForgotPassword: React.FC<ForgotPasswordProps> = ({actionHandler}) => {
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const {
@@ -108,6 +112,7 @@ const ForgotPassword = () => {
     <div style={{ textAlign: 'center' }}>
         <span style={{marginRight: '10px', fontSize:'13px'}}>Send the form and receive an Email with data to update your password.</span>
     </div>
+    <Button onClick={()=>actionHandler({type:'activeSignIn'})}>Go Back</Button>
 </Container>
   )
 }

@@ -30,10 +30,10 @@ const useFetch = () => {
     };
     setIsLoading(true);
     try {
-      const {data: response} = await axios(config);
-      callback(response)
+      const {data: responseData} = await axios(config);
+      callback({success: true, responseData})
     } catch (error: any) {
-      callback({success:false,message:error})
+      callback({success:false, errorMessage:error})
     } finally {
       setIsLoading(false);
     }
