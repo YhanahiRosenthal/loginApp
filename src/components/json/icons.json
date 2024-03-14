@@ -1,0 +1,11 @@
+{
+    "one": "{base_image_url}/dog.png",
+    "two": "{base_image_url}/cat.png",
+    "three": "{base_image_url}/elefant.png",
+    "four": "{base_image_url}/cow.png",
+    "five": "{base_image_url}/tortle.png",
+    "six": "{base_image_url}/chicken.png",
+    "seven": "{base_image_url}/gorilla.png",
+    "eight": "{base_image_url}/jirafe.png",
+    "nine": "{base_image_url}/rabbit.png"
+}
