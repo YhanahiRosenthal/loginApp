@@ -4,6 +4,7 @@ import ForgotPassword from './components/forgot-password/ForgotPassword';
 import TermsAndConditions from './components/TermsAndConditions/TermsAndCoditions';
 import SignInForm from './components/sign-in/SignInForm';
 import SignUpForm from './components/sign-up/SignUpForm';
+import CircularProgress from '@mui/material/CircularProgress';
 import { HttpMethods , useFetch } from './components/useHooks/UseFetch';
 
 enum FormType {
@@ -103,7 +104,22 @@ function App() {
 
   return (
     <>
-      {/* {fetchHandler.isLoading && <Overlay><>loader here</></Overlay>} // fixed, z-index 999, height:100% to cover all the UI and stop actions while loading */}
+      {fetchHandler.isLoading && 
+        <div style={{
+          display: 'flex',
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          zIndex: '999',
+          justifyContent: 'center',
+            alignItems: 'center'
+        }}>
+          <CircularProgress color="success" />
+        </div>
+      }
       {renderActiveForm()}
     </>
   );

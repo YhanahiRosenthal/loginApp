@@ -35,7 +35,9 @@ const useFetch = () => {
     } catch (error: any) {
       callback({success:false, errorMessage:error})
     } finally {
-      setIsLoading(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1500);
     }
 }
 
