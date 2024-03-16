@@ -7,9 +7,9 @@ import {
     formStyle,
     textFieldStyle,
     submitButtonStyle,
-    formStringsStyle
+    formStringsStyle,
+    linkStyles
 } from '../styles/styles';
-import { Link } from 'react-router-dom';
 import {
     Container,
     TextField,
@@ -61,9 +61,11 @@ const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
         if (Object.values(errors).length === 0) {
             const callback = (response: any) => {
                 if(response.success){
-                    window.location = response.message.appUrl;
+                    setTimeout(() => {
+                        window.location.href = 'http://www.google.com.ar';
+                    }, 1500);
                 }else{
-                    setError(response.message.message || 'Invalid credentials');
+                    setError(response.errorMessage.message || 'Invalid credentials');
                 }
             }
             actionHandler({type:'authoriseUser',payload:{callback, data:dataToSubmit}})
@@ -116,7 +118,7 @@ const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
                     Sign In
                 </Button>
                 <div style={{ textAlign: 'center' }}>
-                    <span style={formStringsStyle}>Forgot your password?</span><Link style={formStringsStyle} to="/forgot-password" >Click here</Link>
+                    <span style={formStringsStyle}>Forgot your password?</span><span style={linkStyles} onClick={() => actionHandler({type: 'activeForgotPassword', payload:{}})} >Click here</span>
                 </div>
             </form>
             <Divider
@@ -130,7 +132,7 @@ const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <span style={formStringsStyle}>Don't have an account?</span> <Link style={formStringsStyle} to="/signup" >Register</Link>
+                <span style={formStringsStyle}>Don't have an account?</span> <span style={linkStyles} onClick={() => actionHandler({type: 'activeSignUp', payload:{}})} >Register</span>
             </div>
             {error &&
                 <div>
