@@ -104,7 +104,7 @@ function App() {
 
   return (
     <>
-      {fetchHandler.isLoading && 
+      {fetchHandler.isLoading &&
         <div style={{
           display: 'flex',
           position: 'fixed',
