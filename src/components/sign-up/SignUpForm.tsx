@@ -14,6 +14,7 @@ import React, { useState, useEffect } from 'react';
 import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useForm } from 'react-hook-form';
+import { useLabel, useStyles } from '../useHooks/useThemeLabel';
 
 interface FormData {
     displayName: string;
@@ -33,6 +34,9 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
     const [showPassword, setShowPassword] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
     const [error, setError] = useState();
+
+    const wLabel = useLabel();
+    const wStyles = useStyles();
 
     const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -150,6 +154,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
     return (
         <Grid
             sx={{
+                fontFamily:wStyles('fonts.body'),
                 minWidth: '24rem',
                 maxWidth: '31rem'
             }}
@@ -162,7 +167,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
             marginBottom='4rem'
         >
             <Typography variant="h4" gutterBottom textAlign='center'>
-                Create an account
+                {wLabel('Create account')}
             </Typography>
             <form onSubmit={handleSubmit}>
                 <Grid
@@ -182,7 +187,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
                         }}
                         >
                         <TextField
-                            label="Display Name"
+                            label= {wLabel('Display name')}
                             {...register('displayName')}
                             name="displayName"
                             value={formData.displayName}
@@ -209,7 +214,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
                         }}
                         >
                         <TextField
-                            label="Username"
+                            label= {wLabel('username')}
                             {...register('username')}
                             name="username"
                             value={formData.username}
@@ -236,7 +241,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
                         }}
                         >
                         <TextField
-                            label="Email"
+                            label= {wLabel('Email')}
                             {...register('email')}
                             name="email"
                             value={formData.email}
@@ -275,7 +280,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
                             variant="standard"
                             error={!!errors.password}
                             >
-                            <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+                            <InputLabel htmlFor="standard-adornment-password">{wLabel('Password')}</InputLabel>
                             <Input
                                 id="standard-adornment-password"
                                 {...register('password')}
@@ -311,7 +316,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
                         <span
                             style={{color: 'black', fontSize: '13px'}}
                             >
-                            Do you agree to <span style={linkStyles} onClick= {() => actionHandler({type: 'activeTermsAndConditions', payload:{}})} >terms and privacy policy?</span>
+                            {wLabel('Do you agree to')} <span style={linkStyles} onClick= {() => actionHandler({type: 'activeTermsAndConditions', payload:{}})} >{wLabel('terms and privacy policy')}</span>
                         </span>
                     </Grid>
                     <Button
@@ -324,7 +329,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
                         disabled={!isFormValid}
                         type='submit'
                     >
-                        Create account
+                        {wLabel('Sign up')}
                     </Button>
                 </Grid>
             </form>
@@ -338,7 +343,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <span style={{fontSize: '13px'}} >Do you have an account? <span style={linkStyles} onClick={() => actionHandler({type:'activeSignIn', payload:{}})}>Login</span></span>
+                <span style={{fontSize: '13px'}} >{wLabel('Do you have an account')} <span style={linkStyles} onClick={() => actionHandler({type:'activeSignIn', payload:{}})}>{wLabel('Log in')}</span></span>
             </div>
             {error &&
                 <div>

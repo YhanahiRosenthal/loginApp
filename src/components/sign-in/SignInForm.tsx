@@ -17,6 +17,7 @@ import {
     Divider,
     Typography,
 } from '@mui/material'
+import { useLabel, useStyles } from '../useHooks/useThemeLabel';
 
 
 const schema = Joi.object({
@@ -48,6 +49,9 @@ const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState();
 
+    const wLabel = useLabel();
+    const wStyles = useStyles();
+
     const {
         register,
         handleSubmit,
@@ -75,17 +79,18 @@ const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
     return (
         <Container
         sx={{
+            fontFamily:wStyles('fonts.body'),
             minWidth: '24rem',
             maxWidth: '31rem'
         }}
         style={containerStyle}>
             <form style={formStyle} onSubmit={handleSubmit(onSubmit)}>
                 <Typography variant='h4' align='center'>
-                    Sign In
+                    {wLabel('Log in')}
                 </Typography>
                 <TextField
                     style= {textFieldStyle}
-                    label= 'Username'
+                    label= {wLabel('username')}
                     {...register('username')}
                     name='username'
                     variant='standard'
@@ -97,7 +102,7 @@ const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
                 />
                 <TextField
                     style= {textFieldStyle}
-                    label= 'Password'
+                    label= {wLabel('Password')}
                     {...register('password')}
                     name='password'
                     variant='standard'
@@ -115,10 +120,10 @@ const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
                     color='primary'
                     fullWidth
                 >
-                    Sign In
+                    {wLabel('Log in')}
                 </Button>
                 <div style={{ textAlign: 'center' }}>
-                    <span style={formStringsStyle}>Forgot your password?</span><span style={linkStyles} onClick={() => actionHandler({type: 'activeForgotPassword', payload:{}})} >Click here</span>
+                    <span style={formStringsStyle}>{wLabel('Forgot your password')}</span><span style={linkStyles} onClick={() => actionHandler({type: 'activeForgotPassword', payload:{}})} >{wLabel('Click here')}</span>
                 </div>
             </form>
             <Divider
@@ -132,7 +137,7 @@ const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <span style={formStringsStyle}>Don't have an account?</span> <span style={linkStyles} onClick={() => actionHandler({type: 'activeSignUp', payload:{}})} >Register</span>
+                <span style={formStringsStyle}>{wLabel('Dont have an account')}</span> <span style={linkStyles} onClick={() => actionHandler({type: 'activeSignUp', payload:{}})} >{wLabel('Register')}</span>
             </div>
             {error &&
                 <div>
@@ -143,4 +148,4 @@ const SignInForm: React.FC<SignInFormProps> = ({actionHandler}) => {
   )
 }
 
-export default SignInForm
+export default SignInForm;

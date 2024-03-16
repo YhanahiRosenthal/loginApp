@@ -1,10 +1,12 @@
 import enLanguageJson from '../jsons/languaje_en-en.json';
-import styless from '../jsons/styles.json;';
+import esLanguageJson from '../jsons/language_es-es.json';
+import styless from '../jsons/styles.json';
 
 interface ThemeLabelFont {
     [key: string]: string
 }
 
+/*
 interface Theme {
     [theme: string]: { [property: string]: string };
 }
@@ -12,7 +14,7 @@ interface Theme {
 interface Styles {
     [key: string]: string;
   }
-
+*/
 
   const getStyles = () => {
 
@@ -26,7 +28,7 @@ const useLabel = () => {
     //The method recieves a label and returns the label in the language recieved by backend.
     //If not recieve backend, returns the label passed as parameter.
     const wLabel = (label: string): string => {
-        const language: ThemeLabelFont = enLanguageJson;
+        const language: ThemeLabelFont = esLanguageJson;
         if(label in language){
             return language[label];
         }else{
