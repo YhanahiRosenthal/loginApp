@@ -14,6 +14,7 @@ import {
     Button,
     Typography,
 } from '@mui/material'
+import { useLabel } from '../useHooks/useThemeLabel';
 
 const schema = Joi.object({
     email: Joi.string()
@@ -40,7 +41,11 @@ const schema = Joi.object({
         .required(),
 });
 
-const ForgotPassword = () => {
+interface ForgotPasswordProps {
+    actionHandler: Function
+}
+
+const ForgotPassword: React.FC<ForgotPasswordProps> = ({actionHandler}) => {
     const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const {
@@ -51,6 +56,8 @@ const ForgotPassword = () => {
         mode: 'onBlur',
         resolver: joiResolver(schema)
       });
+
+    const wLabel = useLabel();
 
     const onSubmitForgot = (data: any) => {
         if (Object.values(errors).length === 0) {
@@ -68,11 +75,11 @@ const ForgotPassword = () => {
     style={containerStyle}>
     <form style={formStyle} onSubmit={handleSubmit(onSubmitForgot)}>
         <Typography variant='h4' align='center'>
-            Recover Your Password
+            {wLabel('Recover Your Password')}
         </Typography>
         <TextField
             style= {textFieldStyle}
-            label= 'User Name'
+            label= {wLabel('username')}
             {...register('userName')}
             name='userName'
             variant='standard'
@@ -85,7 +92,7 @@ const ForgotPassword = () => {
         />
         <TextField
             style= {textFieldStyle}
-            label= 'Email'
+            label= {wLabel('Email')}
             {...register('email')}
             name='email'
             variant='standard'
@@ -102,12 +109,13 @@ const ForgotPassword = () => {
             color='primary'
             fullWidth
         >
-            Send
+            {wLabel('Send')}
         </Button>
     </form>
     <div style={{ textAlign: 'center' }}>
-        <span style={{marginRight: '10px', fontSize:'13px'}}>Send the form and receive an Email with data to update your password.</span>
+        <span style={{marginRight: '10px', fontSize:'13px'}}>{wLabel('Send the form and receive...')}</span>
     </div>
+    <Button onClick={()=>actionHandler({type:'activeSignIn'})}>{wLabel('Go Back')}</Button>
 </Container>
   )
 }

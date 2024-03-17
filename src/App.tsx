@@ -4,18 +4,29 @@ import ForgotPassword from './components/forgot-password/ForgotPassword';
 import TermsAndConditions from './components/TermsAndConditions/TermsAndCoditions';
 import SignInForm from './components/sign-in/SignInForm';
 import SignUpForm from './components/sign-up/SignUpForm';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
 import { HttpMethods , useFetch } from './components/useHooks/UseFetch';
 
+enum FormType {
+  SIGN_IN,
+  SIGN_UP,
+  FORGOT_PASSWORD,
+  TERMS_AND_CONDITIONS
+}
 
 function App() {
 
   const fetchHandler = useFetch();
   const [apiToken, setApiToken] = useState<string>('');
+  const [error, setError] = useState();
+  const [activeForm, setActiveForm] = useState(FormType.SIGN_IN);
 
-  const callback = (data:string) => {
-    if(data){
-      setApiToken(data);
+  const callback = (data: any) => {
+    if(data.success){
+      setApiToken(data.responseData);
+    }else{
+      setError(data.errorMessage.message);
+      console.log(error);
     }
   }
 
@@ -57,21 +68,59 @@ function App() {
         );
         break;
       }
+      case 'activeSignIn':{
+        setActiveForm(FormType.SIGN_IN);
+        break;
+      }
+      case 'activeSignUp':{
+        setActiveForm(FormType.SIGN_UP);
+        break;
+      }
+      case 'activeForgotPassword':{
+        setActiveForm(FormType.FORGOT_PASSWORD);
+        break;
+      }
+      case 'activeTermsAndConditions':{
+        setActiveForm(FormType.TERMS_AND_CONDITIONS);
+        break;
+      }
+    }
+  }
+
+  const renderActiveForm = () => {
+    switch (activeForm) {
+      case FormType.SIGN_IN:
+        return <SignInForm actionHandler={actionHandler} />;
+      case FormType.SIGN_UP:
+        return <SignUpForm actionHandler={actionHandler} />;
+      case FormType.FORGOT_PASSWORD:
+        return <ForgotPassword actionHandler={actionHandler} />;
+      case FormType.TERMS_AND_CONDITIONS:
+        return <TermsAndConditions actionHandler={actionHandler} />;
+      default:
+        return null;
     }
   }
 
   return (
     <>
-      {/* {fetchHandler.isLoading && <Overlay><>loader here</></Overlay>} // fixed, z-index 999, height:100% to cover all the UI and stop actions while loading */}
-      <BrowserRouter>
-        <Routes>
-            <Route path='/' element={<SignInForm actionHandler={actionHandler} />} />
-            {/* <Route path='/login' element={<SignInForm actionHandler={actionHandler} />} /> */}
-            <Route path='/forgot-password' element={<ForgotPassword />} />
-            <Route path='/signup' element={<SignUpForm actionHandler={actionHandler} />} />
-            <Route path='/terms-and-coditions' element={<TermsAndConditions />} />
-        </Routes>
-      </BrowserRouter>
+      {fetchHandler.isLoading &&
+        <div style={{
+          display: 'flex',
+          position: 'fixed',
+          top: '0',
+          left: '0',
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          zIndex: '999',
+          justifyContent: 'center',
+            alignItems: 'center'
+        }}>
+          <CircularProgress color="success" />
+        </div>
+      }
+      {renderActiveForm()}
     </>
   );
 }

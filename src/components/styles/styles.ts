@@ -47,3 +47,9 @@ export const textFieldStyleHidden: React.CSSProperties = {
 export const containerErrorPin: React.CSSProperties = {
     height:'1.5rem'
 }
+export const linkStyles: React.CSSProperties = {
+    marginRight: '10px',
+    fontSize: '13px',
+    color: 'blue',
+    textDecorationLine: "underline"
+}

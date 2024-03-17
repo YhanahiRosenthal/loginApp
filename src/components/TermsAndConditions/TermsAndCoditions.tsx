@@ -4,8 +4,13 @@ import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import { Button } from '@mui/material';
 
-const TermsAndConditions: React.FC = () => {
+interface TermsAndConditionsProps {
+    actionHandler: Function
+}
+
+const TermsAndConditions: React.FC<TermsAndConditionsProps> = ({actionHandler}) => {
     const terms = [
         "1. Aceptación de los Términos",
         "Al registrarte en la Plataforma, aceptas automáticamente estos términos y condiciones, así como nuestra política de privacidad.",
@@ -81,6 +86,7 @@ const TermsAndConditions: React.FC = () => {
                 </List>
             </Grid>
             </Grid>
+            <Button onClick={() => actionHandler({type: 'activeSignUp', payload:{}})} >Go Back</Button>
         </Grid>
       );
     };

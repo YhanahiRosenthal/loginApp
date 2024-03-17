@@ -9,9 +9,9 @@ import {
     submitButtonStyle,
     formStringsStyle,
     textFieldStyleHidden,
-    containerErrorPin
+    containerErrorPin,
+    linkStyles
 } from '../styles/styles';
-import { Link } from 'react-router-dom';
 import {
     Container,
     TextField,
@@ -22,7 +22,8 @@ import {
 import Pin from '../shared/pin';
 import PetsIcon from '@mui/icons-material/Pets';
 import PasswordIcon from '@mui/icons-material/Password';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useLabel, useStyles } from '../useHooks/useThemeLabel';
 interface SignInFormProps {
     actionHandler:Function
 }
@@ -79,7 +80,14 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
                 })
     });
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const wLabel = useLabel();
+    const wStyles = useStyles();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors }
+      } = useForm({
         mode: 'onBlur',
         resolver: joiResolver(schema)
     });
@@ -87,10 +95,12 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
     const onSubmit = (dataToSubmit: any) => {
         if (Object.values(errors).length === 0) {
             const callback = (response: any) => {
-                if (response.success) {
-                    window.location = response.message.appUrl;
-                } else {
-                    setError(response.message.message || 'Invalid credentials');
+                if(response.success){
+                    setTimeout(() => {
+                        window.location.href = 'http://www.google.com.ar';
+                    }, 1500);
+                }else{
+                    setError(response.errorMessage.message || 'Invalid credentials');
                 }
             };
             actionHandler({ type: 'authoriseUser', payload: { callback, data: dataToSubmit } });
@@ -99,18 +109,22 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
 
     return (
         <Container
-            sx={{
-                minWidth: '24rem',
-                maxWidth: '31rem'
-            }}
-            style={containerStyle}>
+        sx={{
+            fontFamily:wStyles('fonts.body'),
+            minWidth: '24rem',
+            maxWidth: '31rem'
+        }}
+        style={containerStyle}>
+            {selectedInput !== '' && <div style={{ width:'100%', height:'0' }}>
+                <ArrowBackIcon sx={{ fontSize:'1.5rem', cursor: 'pointer' }} onClick={() => setSelectedInput('')} />
+            </div>}
             <form style={formStyle} onSubmit={handleSubmit(onSubmit)}>
                 <Typography variant='h4' align='center'>
-                    Sign In
+                    {wLabel('Log in')}
                 </Typography>
                 <TextField
-                    style={textFieldStyle}
-                    label='Username'
+                    style= {textFieldStyle}
+                    label= {wLabel('username')}
                     {...register('username')}
                     name='username'
                     variant='standard'
@@ -138,7 +152,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
                 {selectedInput === 'password' &&
                     <TextField
                         style={textFieldStyle}
-                        label='Password'
+                        label= {wLabel('Password')}
                         {...register('password')}
                         name='password'
                         variant='standard'
@@ -181,10 +195,10 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
                     fullWidth
                     disabled={selectedInput === ''}
                 >
-                    Sign In
+                    {wLabel('Log in')}
                 </Button>
                 <div style={{ textAlign: 'center' }}>
-                    <span style={formStringsStyle}>Forgot your password?</span><Link style={formStringsStyle} to="/forgot-password" >Click here</Link>
+                    <span style={formStringsStyle}>{wLabel('Forgot your password')}</span><span style={linkStyles} onClick={() => actionHandler({type: 'activeForgotPassword', payload:{}})} >{wLabel('Click here')}</span>
                 </div>
             </form>
             <Divider
@@ -198,7 +212,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
                       }}
                 />
             <div style={{ textAlign: 'center' }}>
-                <span style={formStringsStyle}>Don't have an account?</span> <Link style={formStringsStyle} to="/signup" >Register</Link>
+                <span style={formStringsStyle}>{wLabel('Dont have an account')}</span> <span style={linkStyles} onClick={() => actionHandler({type: 'activeSignUp', payload:{}})} >{wLabel('Register')}</span>
             </div>
             {error &&
                 <div>
@@ -209,4 +223,4 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
   )
 }
 
-export default SignInForm
+export default SignInForm;

@@ -1,0 +1,82 @@
+{
+  "titles" : {
+    "name": "Crazy Fruit Math",
+    "register": "Live your learning math with crazy fruits!",
+    "phrase": "Win to the crazy fruits in the challenges!"
+  },
+  "fonts": {
+    "heading": "lemon",
+    "body": "lemon",
+    "accent": "lemon",
+    "padding": "0",
+    "fontSize": "1rem",
+    "fontWeight": "500",
+    "textAlign": "center",
+    "letterSpacing": "3px"
+  },
+  "colors": {
+      "primary": "#834bff",
+      "darkPrimary": "#4f1c9c",
+      "highPrimary": "#651fff",
+      "secondary": "#ffa500",
+      "tertiary": "#80deea",
+      "lightTertiary": "#18ffff",
+      "quaternary": "#64ffda",
+      "blun": "#007bff",
+      "pace": "#6c757d",
+      "dark": "#000",
+      "light": "#fff",
+      "text": "#000",
+      "accent": "#ffc107",
+      "forest": "#38b954"
+  },
+  "headers": {
+    "h1": {
+      "fontSize": "2.5rem",
+      "fontWeight": "bold",
+      "color": "#007bff"
+    },
+    "h2": {
+      "fontSize": "2rem",
+      "fontWeight": "bold",
+      "color": "#007bff"
+    },
+    "h3": {
+      "fontSize": "1.5rem",
+      "fontWeight": "bold",
+      "color": "#007bff"
+    }
+  },
+  "images": {
+      "primary": {
+        "logo": "{base_image_url}/apple.png",
+        "banner": "{base_image_url}/pearEye.png",
+        "thumbnail": "{base_image_url}/thumbnail.png",
+        "backgroundTheme": {
+          "primary": "{base_image_url}/orange.png",
+          "secondary": "{base_image_url}/cherry.png",
+          "tertiary": "{base_image_url}/grape.png",
+          "quaternary": "{base_image_url}/watermelon.png"
+        }
+      }
+  },
+  "backgrounds": {
+    "primary": "linear-gradient(to right, #007bff, #6c757d)",
+    "secondary": "#f8f9fa",
+    "accent": "#ffc107",
+    "section": {
+      "primary": "linear-gradient(160deg, #1a237e 51%, rgba(255,255,255,1) 51%, #64ffda 51%",
+      "secondary": "linear-gradient(190deg, #1a237e 69%, rgba(255,255,255,1) 39%, #ffa500 39%",
+      "tertiary": "linear-gradient(200deg, #834bff 51%, rgba(255,255,255,1) 51%, #18ffff 51%)",
+      "quaternary": "linear-gradient(100deg, #4f1c9c 51%, rgba(255,255,255,1) 51%, #4f1c9c 51%)"
+    }
+  },
+  "containerClassName": {
+      "zIndex":5,
+      "display":"flex",
+      "justifyContent":"center",
+      "alignItems":"center",
+      "width":"100%",
+      "paddingTop":"2rem"
+  }
+}
