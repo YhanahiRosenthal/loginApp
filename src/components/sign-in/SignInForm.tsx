@@ -23,7 +23,7 @@ import Pin from '../shared/pin';
 import PetsIcon from '@mui/icons-material/Pets';
 import PasswordIcon from '@mui/icons-material/Password';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useLabel, useStyles } from '../useHooks/useThemeLabel';
+import { useLabel, useStyles} from '../useHooks/useThemeLabel';
 interface SignInFormProps {
     actionHandler:Function
 }

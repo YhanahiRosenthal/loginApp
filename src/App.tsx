@@ -6,6 +6,7 @@ import SignInForm from './components/sign-in/SignInForm';
 import SignUpForm from './components/sign-up/SignUpForm';
 import CircularProgress from '@mui/material/CircularProgress';
 import { HttpMethods , useFetch } from './components/useHooks/UseFetch';
+import { useHasher } from './components/useHooks/useThemeLabel';
 
 enum FormType {
   SIGN_IN,
@@ -17,6 +18,7 @@ enum FormType {
 function App() {
 
   const fetchHandler = useFetch();
+  const passHasher = useHasher();
   const [apiToken, setApiToken] = useState<string>('');
   const [error, setError] = useState();
   const [activeForm, setActiveForm] = useState(FormType.SIGN_IN);
@@ -44,6 +46,11 @@ function App() {
     switch (type){
       case 'authoriseUser':{
         const {data, callback} = payload;
+        if(data.password){
+          passHasher(data.password).then(hashedPass => {
+            data.password = hashedPass;
+          });
+        }
         fetchHandler.fetchData(
           `${process.env.REACT_APP_API_URL}/users/authorize`,
           HttpMethods.POST,
@@ -57,6 +64,11 @@ function App() {
       }
       case 'createUser':{
         const {data, callback} = payload;
+        if(data.password){
+          passHasher(data.password).then(hashedPass => {
+            data.password = hashedPass;
+          });
+        }
         fetchHandler.fetchData(
           `${process.env.REACT_APP_API_URL}/users`,
           HttpMethods.POST,

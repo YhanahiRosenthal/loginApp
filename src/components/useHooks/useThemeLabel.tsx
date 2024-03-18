@@ -28,7 +28,7 @@ const useLabel = () => {
     //The method recieves a label and returns the label in the language recieved by backend.
     //If not recieve backend, returns the label passed as parameter.
     const wLabel = (label: string): string => {
-        const language: ThemeLabelFont = esLanguageJson;
+        const language: ThemeLabelFont = enLanguageJson;
         if(label in language){
             return language[label];
         }else{
@@ -63,7 +63,22 @@ const useStyles = () => {
     return wStyle
 }
 
+const useHasher = () => {
+    const hashPassword = async (password:string) => {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join;
+        return hashHex;
+    }
+
+    return hashPassword;
+
+}
+
 export {
     useLabel,
-    useStyles
+    useStyles,
+    useHasher
 };
