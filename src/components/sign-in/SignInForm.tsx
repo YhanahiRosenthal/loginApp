@@ -31,22 +31,15 @@ interface SignInFormProps {
 const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
-    const [pin, setPin] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [selectedInput, setSelectedInput] = useState<string>('');
-    const pinRef = useRef<HTMLInputElement>(null);
-
-    const handlePinChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        setPin(value);
-    };
+    const passwordRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        setPin(pin);
-        if (pinRef.current) {
-            pinRef.current.focus();
+        if (passwordRef.current) {
+            passwordRef.current.focus();
         }
-    }, [pin]);
+    }, [password]);
 
     const toggleInputType = (inputType: 'password' | 'pin') => {
         setSelectedInput(inputType);
@@ -59,24 +52,14 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
                 'string.base': 'Username must be a text string',
                 'string.empty': 'Username is a required field',
             }),
-        [selectedInput]: selectedInput === 'password'
-            ? Joi.string()
+            password: Joi.string()
                 .min(8)
-                .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-!@#$%^&*()_+|~=`{}[\]:";'<>?,./])[a-zA-Z\d-!@#$%^&*()_+|~=`{}[\]:";'<>?,./]{8,}$/)
+                .pattern(selectedInput === 'password' ? /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-!@#$%^&*()_+|~=`{}[\]:";'<>?,./])[a-zA-Z\d-!@#$%^&*()_+|~=`{}[\]:";'<>?,./]{8,}$/ : /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-!@#$%^&*()_+|~=`{}[\]:";'<>?,./])[a-zA-Z\d-!@#$%^&*()_+|~=`{}[\]:";'<>?,./]{19,}$/)
                 .required()
                 .messages({
-                    'string.pattern.base': 'Password must contain at least one lowercase letter, one uppercase letter, one digit and special character',
-                    'string.min': 'The password must be at least 8 characters long',
-                    'string.empty': 'The password field is required'
-                })
-            : Joi.string()
-                .min(4)
-                .pattern(/^\d+$/)
-                .required()
-                .messages({
-                    'string.pattern.base': 'Pin must contain at least four animals',
-                    'string.min': 'The pin must be at least 4 animals',
-                    'string.empty': 'The pin is required'
+                    'string.pattern.base': selectedInput === 'password' ? 'Password must contain at least one lowercase letter, one uppercase letter, one digit and special character' : 'The pin must have at least 4 numbers',
+                    'string.min': selectedInput === 'password' ? 'The password must be at least 8 characters long' : 'Pin must be at least 4 numbers',
+                    'string.empty': selectedInput === 'password' ? 'The password is required' : 'Pin is required'
                 })
     });
 
@@ -106,6 +89,8 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
             actionHandler({ type: 'authoriseUser', payload: { callback, data: dataToSubmit } });
         }
     };
+
+    console.log(password)
 
     return (
         <Container
@@ -167,23 +152,27 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
                 {selectedInput === 'pin' &&
                     <>
                         <Pin
-                            setPin={setPin}
+                            setPin={setPassword}
                             backColor={'#834bff'}
                             textColor={'#ffffff'}
                         />
                         <TextField
-                            inputRef={pinRef}
                             style={textFieldStyleHidden}
-                            {...register('pin')}
-                            name='pin'
-                            error={!!errors.pin}
+                            label= {wLabel('Password')}
+                            {...register('password')}
+                            name='password'
+                            variant='standard'
+                            fullWidth
+                            error={!!errors.password}
+                            helperText={errors.password?.message ? errors.password.message.toString() : ''}
                             type='password'
-                            value={pin}
-                            onChange={handlePinChange}
+                            value={password}
                             inputProps={{ readOnly: true }}
+                            onChange={(e) => setPassword(e.target.value)}
+                            inputRef={passwordRef}
                         />
                         <div style={containerErrorPin} >
-                            {pin.length < 4 && <p style={{color:'#d30000'}}>{errors.pin?.message ? errors.pin.message.toString() : ''}</p>}
+                            {password.length < 20 && <p style={{color:'#d30000'}}>{errors.password?.message ? errors.password.message.toString() : ''}</p>}
                         </div>
                     </>
                 }
