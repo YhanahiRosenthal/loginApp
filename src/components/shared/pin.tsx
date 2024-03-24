@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { styled } from '@mui/material';
 import { getImage } from '../useHooks/GetImage';
-
 interface RegisterProps {
     setPin: React.Dispatch<React.SetStateAction<string>>;
     textColor: string;
@@ -14,9 +13,9 @@ const GridContainer = styled('div')({
     width: '330px',
     justifyContent:'center',
     alignItems:'center',
-  });
+});
 
-  const Image = styled('img')({
+const Image = styled('img')({
     width: '70%',
     cursor:'pointer',
     transition:'all .2s',
@@ -24,9 +23,9 @@ const GridContainer = styled('div')({
         filter:'brightness(1.05)',
         transform:'scale(1.05)'
     },
-  });
+});
 
-  interface SquareProps {
+interface SquareProps {
     selected: boolean;
     color: string;
 }
@@ -53,15 +52,27 @@ const NumberLabel = styled('div')({
     position:'absolute',
 });
 
+const words: string[] = [
+    "Ape1!",
+    "Ban2@",
+    "Che3#",
+    "Dat4$",
+    "Egg5%",
+    "Fig6^",
+    "Gra7&",
+    "How8*",
+    "ICe9(",
+];
+
 const Pin: React.FC<RegisterProps> = ({setPin, textColor, backColor }) => {
 
     const [selected, setSelected] = useState<number[]>([]);
     const [order, setOrder] = useState<number[]>([]);
-    const [isPin, setIsPin] = useState<number[]>([]);
+    const [isPin, setIsPin] = useState<string[]>([]);
 
     useEffect(() => {
-        setPin(isPin.toString().split(',').join(''))
-    },[isPin])
+        setPin(isPin.join(''));
+    }, [isPin]);
 
     const animals: string[] = getImage();
 
@@ -85,10 +96,10 @@ const Pin: React.FC<RegisterProps> = ({setPin, textColor, backColor }) => {
             }
         });
         setIsPin(prevPin => {
-            if (prevPin.includes(index)) {
-                return prevPin.filter(pin => pin !== index);
+            if (prevPin.includes(words[index])) {
+                return prevPin.filter(pin => pin !== words[index]);
             } else {
-                return [...prevPin, index];
+                return [...prevPin, words[index]];
             }
         });
     };
