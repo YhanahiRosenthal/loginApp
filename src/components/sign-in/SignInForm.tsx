@@ -79,9 +79,10 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
         if (Object.values(errors).length === 0) {
             const callback = (response: any) => {
                 if(response.success){
-                    setTimeout(() => {
-                        window.location.href = 'http://www.google.com.ar';
-                    }, 1500);
+                    // console.log('Response', response)
+                    // setTimeout(() => {
+                        window.location.href = response.responseData.message.appUrl; //'http://www.google.com.ar';
+                    // }, 1500);
                 }else{
                     setError(response.errorMessage.message || 'Invalid credentials');
                 }
@@ -90,7 +91,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
         }
     };
 
-    console.log(password)
+    // console.log(password)
 
     return (
         <Container

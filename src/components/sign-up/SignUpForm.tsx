@@ -129,6 +129,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
             console.log('MessageError: There are error yet')
         }
         const callback = (response: any) => {
+            console.log('Response', response)
             if(response.success){
                 actionHandler({type: 'activeSignIn', payload:{}});
             }else{
