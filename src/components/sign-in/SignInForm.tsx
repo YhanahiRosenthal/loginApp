@@ -81,7 +81,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ actionHandler }) => {
                 if(response.success){
                     // console.log('Response', response)
                     // setTimeout(() => {
-                        window.location.href = response.responseData.message.appUrl; //'http://www.google.com.ar';
+                        window.location = response.responseData.message.appUrl; //'http://www.google.com.ar';
                     // }, 1500);
                 }else{
                     setError(response.errorMessage.message || 'Invalid credentials');
