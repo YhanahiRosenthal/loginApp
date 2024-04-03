@@ -51,15 +51,17 @@ function App() {
             data.password = hashedPass;
           });
         }
-        fetchHandler.fetchData(
-          `${process.env.REACT_APP_API_URL}/users/authorize`,
-          HttpMethods.POST,
-          {
-              "X-APIKEY": apiToken
-          },
-          data,
-          callback
-        );
+        setTimeout(() => {
+          fetchHandler.fetchData(
+            `${process.env.REACT_APP_API_URL}/users/authorize`,
+            HttpMethods.POST,
+            {
+                "X-APIKEY": apiToken
+            },
+            data,
+            callback
+          );
+        }, 500);
         break;
       }
       case 'createUser':{
@@ -69,15 +71,17 @@ function App() {
             data.password = hashedPass;
           });
         }
-        fetchHandler.fetchData(
-          `${process.env.REACT_APP_API_URL}/users`,
-          HttpMethods.POST,
-          {
-              "X-APIKEY": apiToken
-          },
-          data,
-          callback
-        );
+        setTimeout(() => {
+          fetchHandler.fetchData(
+            `${process.env.REACT_APP_API_URL}/users`,
+            HttpMethods.POST,
+            {
+                "X-APIKEY": apiToken
+            },
+            data,
+            callback
+          );
+        }, 500);
         break;
       }
       case 'activeSignIn':{
@@ -124,12 +128,12 @@ function App() {
           left: '0',
           width: '100%',
           height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          zIndex: '999',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          zIndex: '10',
           justifyContent: 'center',
-            alignItems: 'center'
+          alignItems: 'center'
         }}>
-          <CircularProgress color="success" />
+          <CircularProgress color="success" style={{ zIndex: '999' }} />
         </div>
       }
       {renderActiveForm()}
