@@ -133,7 +133,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
             if(response.success){
                 actionHandler({type: 'activeSignIn', payload:{}});
             }else{
-                setError(response.message.message || 'Invalid credentials');
+                setError(response.message || 'Invalid credentials');
             }
         }
         actionHandler({type:'createUser',payload:{callback, data:formData}})

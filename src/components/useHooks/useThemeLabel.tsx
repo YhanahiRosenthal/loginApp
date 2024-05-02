@@ -64,17 +64,17 @@ const useStyles = () => {
 }
 
 const useHasher = () => {
-    const hashPassword = async (password:string) => {
+    const hashPassword = async (password: string) => {
         const encoder = new TextEncoder();
         const data = encoder.encode(password);
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+        const allowedChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+{}[]|:;"\'<>,.?/';
+        const hashHex = hashArray.map(byte => allowedChars[byte % allowedChars.length]).join('');
         return hashHex;
     }
 
     return hashPassword;
-
 }
 
 export {
