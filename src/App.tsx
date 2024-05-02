@@ -42,17 +42,15 @@ function App() {
     );
   }, [])
 
-  const actionHandler = ({type, payload}:{type:string, payload:any}) => {
+  const actionHandler = async ({type, payload}:{type:string, payload:any}) => {
     switch (type){
       case 'authoriseUser':{
         const {data, callback} = payload;
         if(data.password){
-          passHasher(data.password).then(hashedPass => {
-            data.password = hashedPass;
-          });
+          const hashedPass = await passHasher(data.password);
+          data.password = hashedPass;
         }
-        setTimeout(() => {
-          fetchHandler.fetchData(
+        fetchHandler.fetchData(
             `${process.env.REACT_APP_API_URL}/users/authorize`,
             HttpMethods.POST,
             {
@@ -60,19 +58,16 @@ function App() {
             },
             data,
             callback
-          );
-        }, 500);
+        );
         break;
       }
       case 'createUser':{
         const {data, callback} = payload;
         if(data.password){
-          passHasher(data.password).then(hashedPass => {
-            data.password = hashedPass;
-          });
+          const hashedPass = await passHasher(data.password);
+          data.password = hashedPass;
         }
-        setTimeout(() => {
-          fetchHandler.fetchData(
+        fetchHandler.fetchData(
             `${process.env.REACT_APP_API_URL}/users`,
             HttpMethods.POST,
             {
@@ -80,8 +75,7 @@ function App() {
             },
             data,
             callback
-          );
-        }, 500);
+        );
         break;
       }
       case 'activeSignIn':{
