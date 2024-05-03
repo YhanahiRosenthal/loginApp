@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { styled } from '@mui/material';
 import { getImage } from '../useHooks/GetImage';
+import icons from '../json/icons.json';
 interface RegisterProps {
     setPin: React.Dispatch<React.SetStateAction<string>>;
     textColor: string;
@@ -74,7 +75,7 @@ const Pin: React.FC<RegisterProps> = ({setPin, textColor, backColor }) => {
         setPin(isPin.join(''));
     }, [isPin]);
 
-    const animals: string[] = getImage();
+    const animals: string[] = getImage(icons);
 
     const handleSelected = (index: number) => {
         setSelected(prevSelected => {

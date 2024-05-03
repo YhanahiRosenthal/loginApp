@@ -1,17 +1,15 @@
-import icons from '../json/icons.json';
+const images = (icon: object) => {
 
-const images = () => {
-
-    const iconPin = JSON.parse(JSON.stringify(icons).replaceAll('{base_image_url}', process.env.REACT_APP_ASSETS_BASE_URL || ''));
+    const iconPin = JSON.parse(JSON.stringify(icon).replaceAll('{base_image_url}', process.env.REACT_APP_ASSETS_BASE_URL || ''));
     return iconPin;
 }
 
-const getImage = () => {
+const getImage = (icon: any) => {
 
-    const anima = images();
+    const anima = images(icon);
     const animals: string[] = [];
 
-    for (var icon in anima) {
+    for (let icon in anima) {
         if (anima[icon]) {
             animals.push(anima[icon]);
         }

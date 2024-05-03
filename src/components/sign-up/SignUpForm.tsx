@@ -15,12 +15,21 @@ import Joi from 'joi';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useForm } from 'react-hook-form';
 import { useLabel, useStyles } from '../useHooks/useThemeLabel';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import ListDivider from '@mui/joy/ListDivider';
+import Select, { SelectOption } from '@mui/joy/Select';
+import Option from '@mui/joy/Option';
+import Avatar from '@mui/joy/Avatar';
+import languageIcons from '../json/languageIcon.json';
+import { getImage } from '../useHooks/GetImage';
 
 interface FormData {
     displayName: string;
     username: string;
     email: string;
     password: string;
+    language: string | null;
+    type: string;
     termsAndConditions: Boolean;
   }
 
@@ -37,6 +46,7 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
 
     const wLabel = useLabel();
     const wStyles = useStyles();
+    const iconsLanguage: string[] = getImage(languageIcons);
 
     const handleShowPassword = () => setShowPassword((show) => !show);
 
@@ -45,6 +55,8 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
         username: '',
         email: '',
         password: '',
+        language: 'en-en',
+        type:'1',
         termsAndConditions: isPressed,
       });
 
@@ -151,6 +163,33 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     }
+
+    const options = [
+        { value: 'en-en', label: wLabel('English'), src: iconsLanguage[0] },
+        { value: 'es-es', label: wLabel('Spanish'), src: iconsLanguage[1] },
+      ];
+
+      function renderValue(option: SelectOption<string> | null) {
+        if (!option) {
+          return null;
+        }
+
+        return (
+          <React.Fragment>
+            <ListItemDecorator>
+              <Avatar size="sm" src={options.find((o) => o.value === option.value)?.src} />
+            </ListItemDecorator>
+            {option.label}
+          </React.Fragment>
+        );
+      }
+
+      const handleChangeIdiom = (event: React.ChangeEvent<{ value: unknown }>, value: string | null) => {
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            language: value,
+        }));
+    };
 
     return (
         <Grid
@@ -304,6 +343,45 @@ const SignForm: React.FC<SignUpFormProps> = ({actionHandler}) => {
                             <FormHelperText>{errors.password?.message ? errors.password.message.toString() : ''}</FormHelperText>
     )}
                         </FormControl>
+                    </Grid>
+                    <Grid
+                         item
+                         xs={12}
+                         md={6}
+                         sx={{
+                             minWidth: '18rem',
+                             maxWidth: '31rem',
+                             marginTop: '1rem'
+                         }}
+                    >
+                        <Select
+                            defaultValue="en-en"
+                            slotProps={{
+                                listbox: {
+                                sx: {
+                                    '--ListItemDecorator-size': '44px',
+                                },
+                                },
+                            }}
+                            sx={{
+                                '--ListItemDecorator-size': '44px',
+                                minWidth: 240,
+                            }}
+                            renderValue={renderValue}
+                            onChange={(event:any, value:any) => handleChangeIdiom(event, value)}
+                            >
+                            {options.map((option, index) => (
+                                <React.Fragment key={option.value}>
+                                    {index !== 0 ? <ListDivider role="none" inset="startContent" /> : null}
+                                    <Option value={option.value} label={option.label}>
+                                        <ListItemDecorator>
+                                            <Avatar size="sm" src={iconsLanguage[index]} />
+                                        </ListItemDecorator>
+                                        {option.label}
+                                    </Option>
+                                </React.Fragment>
+                            ))}
+                            </Select>
                     </Grid>
                     <Grid
                         marginBottom='2rem'
